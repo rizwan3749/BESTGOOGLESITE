@@ -18,7 +18,7 @@ export function ThemeSwitcher() {
   return (
     <div className="flex gap-4 justify-end px-4">
       <div className="flex gap-4 justify-end px-4">
-        <Link href="\src\app\Signup\page.tsx">Sign up</Link>
+        <Link href="\src\app\Signup">Sign up</Link>
         <a href=""></a>
       </div>
       <button onClick={() => setTheme('light')}></button>
