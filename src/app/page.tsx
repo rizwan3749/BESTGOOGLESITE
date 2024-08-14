@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
-import { IconClipboardCopy } from "@tabler/icons-react";
+import { IconClipboardCopy, IconSun, IconMoon } from "@tabler/icons-react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import axios from "axios";
 
 // Draggable component with transition
 function DraggableItem({ id, children }) {
@@ -16,7 +17,7 @@ function DraggableItem({ id, children }) {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    transition: transform ? "transform 0.2s ease in" : "none",
+    transition: transform ? "transform 0.2s ease-in" : "none",
   };
 
   return (
@@ -40,8 +41,8 @@ function DroppableGrid({ id, children }) {
 
   // Apply background color transition
   const style = {
-    borderRadius:"1rem",
-    padding:"0.2rem",
+    borderRadius: "1rem",
+    padding: "0.2rem",
     backgroundColor: isOver ? "lightblue" : undefined,
     transition: "background-color padding borderRadius 0.2s ease",
   };
@@ -52,6 +53,75 @@ function DroppableGrid({ id, children }) {
     </div>
   );
 }
+
+// Theme toggle and weather component
+function ThemeSwitcher() {
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState("light");
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
+
+    // Fetch weather data when the component is mounted
+    const fetchWeather = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=Delhi&appid=YOUR_API_KEY&units=metric`
+        );
+        setWeather(response.data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  if (!mounted) return null;
+
+  const isDarkMode = theme === "dark";
+
+  return (
+    <div className="flex gap-4 justify-end px-4 items-center">
+      <button
+        onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+        className="p-2"
+      >
+        {isDarkMode ? (
+          <IconSun className="h-8 w-8 text-yellow-500" />
+        ) : (
+          <IconMoon className="h-8 w-8 text-gray-800" />
+        )}
+      </button>
+      {weather && (
+        <div className="weather-info flex justify-end text-white items-center gap-2">
+          <img
+            src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+            alt={weather.weather[0].description}
+            className="h-8 w-8"
+          />
+          <div className="text-gray-800">
+            <p className="font-semibold">{weather.name}</p>
+            <p>Temperature: {weather.main.temp}°C</p>
+            <p>Condition: {weather.weather[0].description}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 export default function Home() {
   const [items, setItems] = useState([
@@ -85,10 +155,18 @@ export default function Home() {
       description: "ALL 250+ AI TOOLS LINKS.",
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     },
+
+    {
+      id: "6",
+      title: "GOOGLE TOOLS",
+      description: "ALL 250+ GOOGLE TOOLS LINKS.",
+      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+    },
   ]);
 
   return (
     <>
+      <ThemeSwitcher />
       <h2 className="text-center text-6xl mb-4 font-bold">Google</h2>
       <div className="mb-4">
         <PlaceholdersAndVanishInput
