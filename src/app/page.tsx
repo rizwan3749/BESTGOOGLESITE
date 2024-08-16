@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   DndContext,
   closestCenter,
@@ -10,13 +11,15 @@ import {
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { IconClipboardCopy } from "@tabler/icons-react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import AnimatedTooltipPreview from "@/components/AnimatedTooltip";
 
 // Draggable component
 function DraggableItem({ id, children }) {
@@ -29,7 +32,7 @@ function DraggableItem({ id, children }) {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    transition,
+    transition: transform ? "transform 0.2s ease-in" : "none",
   };
 
   return (
@@ -98,6 +101,12 @@ export default function Home() {
       description: "ALL 250+ AI TOOLS LINKS.",
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     },
+    {
+      id: "6",
+      title: "GOOGLE TOOLS",
+      description: "ALL 250+ GOOGLE TOOLS LINKS.",
+      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+    },
   ]);
 
   const [user] = useAuthState(auth);
@@ -111,7 +120,7 @@ export default function Home() {
         if (docSnap.exists()) {
           const savedItems = docSnap.data().items;
           setItems((currentItems) =>
-            savedItems.map((savedItem: any) => {
+            savedItems.map((savedItem) => {
               const existingItem = currentItems.find(
                 (item) => item.id === savedItem.id
               );
@@ -127,7 +136,7 @@ export default function Home() {
   }, [user]);
 
   // Save widget positions when items change
-  const saveItems = async (newItems: any) => {
+  const saveItems = async (newItems) => {
     setItems(newItems);
     if (user) {
       const positions = newItems.map(({ id }) => ({ id }));
@@ -137,7 +146,7 @@ export default function Home() {
   };
 
   // Handle drag end
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -156,18 +165,26 @@ export default function Home() {
     <>
       <h2 className="text-center text-6xl mb-4 font-bold">Google</h2>
       <div className="mb-4">
-        <input
-          type="text"
-          placeholder="ASK GOOGLE ANYTHING"
-          className="w-full p-2 border rounded"
+        <PlaceholdersAndVanishInput
+          onChange={(e) => {
+            e.target.value;
+          }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log("Submitted");
+          }}
+          placeholders={[
+            "ASK GOOGLE ANYTHING",
+            "TODAY's WEATHER?",
+            "RESTAURANT NEAR ME?",
+          ]}
         />
       </div>
-
+      <div className="mt-9  mb-[-2rem]">
+        <AnimatedTooltipPreview />
+      </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={items.map((item) => item.id)}
-          // strategy={sortableKeyboardCoordinates}
-        >
+        <SortableContext items={items.map((item) => item.id)}>
           <BentoGrid className="max-w-4xl p-3 mx-auto">
             {items.map((item) => (
               <DroppableGrid id={item.id} key={item.id}>
