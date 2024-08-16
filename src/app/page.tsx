@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import {
   DndContext,
   closestCenter,
@@ -64,6 +65,7 @@ function DroppableGrid({ id, children }) {
 
 // Home component
 export default function Home() {
+  const { theme } = useTheme(); // Directly using the theme state
   const [items, setItems] = useState([
     {
       id: "1",
@@ -150,13 +152,21 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="mt-24">
       <Script
         id="google-cse"
         async
         src="https://cse.google.com/cse.js?cx=80904074a37154829"
       />
-      <h2 className="text-center text-6xl mb-4 font-bold">Google</h2>
+      <img
+        src={
+          theme === "dark"
+            ? "/images/GoogleBlack.png"
+            : "/images/GoogleWhite.png"
+        }
+        alt="Google Logo"
+        className="m-auto"
+      />
       <div className="mb-4">
         <div className="w-[45vw] p-4 dark:bg-gray-800 dark:text-black rounded-lg shadow-sm m-auto">
           <div className="gcse-search"></div>
@@ -183,6 +193,6 @@ export default function Home() {
           </BentoGrid>
         </SortableContext>
       </DndContext>
-    </>
+    </div>
   );
 }

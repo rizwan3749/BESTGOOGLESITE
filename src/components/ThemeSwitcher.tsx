@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase"; // Adjust the import path based on your structure
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { IconSun, IconMoon } from "@tabler/icons-react";
-import { divMode } from "@tsparticles/engine";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -47,14 +46,43 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="flex gap-4 justify-around py-3 px-4">
-      <Link href="/" className="font-bold">
-        <span className="text-green-500 dark:text-green-300">Best</span>
-        <span className="text-red-500 dark:text-red-300">Google</span>
-        <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
-      </Link>
+    <div className="flex gap-4 justify-around py-3 px-4 border-b border-black/10 dark:border-white/10">
+      <div>
+        <Link href="/" className="font-bold">
+          <span className="text-green-500 dark:text-green-300">Best</span>
+          <span className="text-red-500 dark:text-red-300">Google</span>
+          <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
+        </Link>
+      </div>
 
       <div className="flex gap-2">
+        <Link href="/premiumPage">
+          <div className=" flex justidfy-center items-center">
+            <div className="relative inline-flex group">
+              <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+              <a
+                href="#"
+                title="Get quote now"
+                className="relative inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black/80 dark:text-white transition-all duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                role="button"
+              >
+                Get Premium
+              </a>
+            </div>
+          </div>
+        </Link>
+        <div className="flex gap-4 justify-end px-4">
+          <button
+            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+            className="p-2"
+          >
+            {isDarkMode ? (
+              <IconMoon className="h-8 w-8 text-white/80" />
+            ) : (
+              <IconSun className="h-8 w-8 text-yellow-500" />
+            )}
+          </button>
+        </div>
         {!user ? (
           <>
             <Link href="/Signup/">Sign up</Link>
@@ -81,18 +109,6 @@ export function ThemeSwitcher() {
             )}
           </div>
         )}
-        <div className="flex gap-4 justify-end px-4">
-          <button
-            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-            className="p-2"
-          >
-            {isDarkMode ? (
-              <IconMoon className="h-8 w-8 text-white/80" />
-            ) : (
-              <IconSun className="h-8 w-8 text-yellow-500" />
-            )}
-          </button>
-        </div>
       </div>
     </div>
   );
