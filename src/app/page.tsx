@@ -1,38 +1,32 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import {
   DndContext,
   closestCenter,
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-} from "@dnd-kit/sortable";
+import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { IconClipboardCopy } from "@tabler/icons-react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import AnimatedTooltipPreview from "@/components/AnimatedTooltip";
+import Script from "next/script";
+import "../style/gsearch.css";
 
 // Draggable component
 function DraggableItem({ id, children }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useDraggable({
-      id: id,
-    });
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: id,
+  });
 
   const style = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    transition: transform ? "transform 0.2s ease-in" : "none",
   };
 
   return (
@@ -58,7 +52,7 @@ function DroppableGrid({ id, children }) {
     borderRadius: "1rem",
     padding: "0.2rem",
     backgroundColor: isOver ? "lightblue" : undefined,
-    transition: "background-color padding borderRadius 0.2s ease",
+    transition: "background-color padding borderRadius 0.2s",
   };
 
   return (
@@ -101,12 +95,6 @@ export default function Home() {
       description: "ALL 250+ AI TOOLS LINKS.",
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     },
-    {
-      id: "6",
-      title: "GOOGLE TOOLS",
-      description: "ALL 250+ GOOGLE TOOLS LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-    },
   ]);
 
   const [user] = useAuthState(auth);
@@ -120,7 +108,7 @@ export default function Home() {
         if (docSnap.exists()) {
           const savedItems = docSnap.data().items;
           setItems((currentItems) =>
-            savedItems.map((savedItem) => {
+            savedItems.map((savedItem: any) => {
               const existingItem = currentItems.find(
                 (item) => item.id === savedItem.id
               );
@@ -136,7 +124,7 @@ export default function Home() {
   }, [user]);
 
   // Save widget positions when items change
-  const saveItems = async (newItems) => {
+  const saveItems = async (newItems: any) => {
     setItems(newItems);
     if (user) {
       const positions = newItems.map(({ id }) => ({ id }));
@@ -146,7 +134,7 @@ export default function Home() {
   };
 
   // Handle drag end
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -163,24 +151,18 @@ export default function Home() {
 
   return (
     <>
+      <Script
+        id="google-cse"
+        async
+        src="https://cse.google.com/cse.js?cx=80904074a37154829"
+      />
       <h2 className="text-center text-6xl mb-4 font-bold">Google</h2>
       <div className="mb-4">
-        <PlaceholdersAndVanishInput
-          onChange={(e) => {
-            e.target.value;
-          }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("Submitted");
-          }}
-          placeholders={[
-            "ASK GOOGLE ANYTHING",
-            "TODAY's WEATHER?",
-            "RESTAURANT NEAR ME?",
-          ]}
-        />
+        <div className="w-[45vw] p-4 dark:bg-gray-800 dark:text-black rounded-lg shadow-sm m-auto">
+          <div className="gcse-search"></div>
+        </div>
       </div>
-      <div className="mt-9  mb-[-2rem]">
+      <div className="mt-9 mb-[-2rem]">
         <AnimatedTooltipPreview />
       </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

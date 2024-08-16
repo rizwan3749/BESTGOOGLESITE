@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth, provider } from "../../firebase";
 
 export default function SignupPage() {
@@ -10,9 +15,12 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [otp, setOtp] = useState("");
+  const [verificationCode, setVerificationCode] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,25 +28,57 @@ export default function SignupPage() {
     setIsClient(true);
   }, []);
 
-  const handleEmailSignUp = async (e:any) => {
+  const handleEmailSignUp = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // Step 1: Send OTP to the user's email
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Step 2: Send a verification email (acting as OTP)
+      await sendEmailVerification(user);
+
+      setIsOtpSent(true);
       setLoading(false);
-      router.push("/"); // Redirect to homepage
-    } catch (error:any) {
+
+      alert("Verification email sent. Please check your inbox.");
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
+  };
+
+  const handleOtpVerification = async () => {
+    setLoading(true);
+
+    try {
+      // Verify the email and sign the user in
+      await signInWithEmailAndPassword(auth, email, password);
+      const user: any = auth.currentUser;
+
+      if (user.emailVerified) {
+        router.push("/"); // Redirect to homepage
+      } else {
+        setError("Email not verified. Please check your inbox.");
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+
+    setLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       router.push("/"); // Redirect to homepage
-    } catch (error:any) {
+    } catch (error: any) {
       setError(error.message);
     }
   };
@@ -56,70 +96,104 @@ export default function SignupPage() {
         Sign up to get additional features
       </p>
 
-      {error && <p className="text-red-500">Something went wrong. Please Try Again</p>}
+      {error && (
+        <p className="text-red-500">Something went wrong. Please Try Again</p>
+      )}
 
-      <form className="my-8" onSubmit={handleEmailSignUp}>
-        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-          <div className="flex flex-col space-y-2 w-[48.5%] ">
-            <label htmlFor="firstname" className="font-medium">First name</label>
+      {!isOtpSent ? (
+        <form className="my-8" onSubmit={handleEmailSignUp}>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+            <div className="flex flex-col space-y-2 w-[48.5%] ">
+              <label htmlFor="firstname" className="font-medium">
+                First name
+              </label>
+              <input
+                id="firstname"
+                placeholder="Tyler"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+            <div className="flex flex-col space-y-2 w-[48.5%] ">
+              <label htmlFor="lastname" className="font-medium">
+                Last name
+              </label>
+              <input
+                id="lastname"
+                placeholder="Durden"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="font-medium">
+              Email Address
+            </label>
             <input
-              id="firstname"
-              placeholder="Tyler"
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="border p-2 rounded"
+              id="email"
+              placeholder="projectmayhem@fc.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border p-2 rounded w-full"
             />
           </div>
-          <div className="flex flex-col space-y-2 w-[48.5%] ">
-            <label htmlFor="lastname" className="font-medium">Last name</label>
+          <div className="mb-4">
+            <label htmlFor="password" className="font-medium">
+              Password
+            </label>
             <input
-              id="lastname"
-              placeholder="Durden"
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="border p-2 rounded"
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border p-2 rounded w-full"
             />
           </div>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="font-medium">Email Address</label>
+          <button
+            className="bg-gradient-to-br from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Sending OTP..." : "Sign Up"}
+          </button>
+          <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+          <button
+            className=" text-neutral-700 border shadow-sm dark:text-neutral-300 text-sm  text-center px-4 w-full  rounded-md h-10 font-medium bg-white dark:bg-zinc-900"
+            type="button"
+            onClick={handleGoogleSignIn}
+          >
+            Sign in with Google
+          </button>
+        </form>
+      ) : (
+        <div>
+          <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
+            Enter the OTP sent to your email.
+          </p>
           <input
-            id="email"
-            placeholder="projectmayhem@fc.com"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border p-2 rounded w-full"
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className="border p-2 rounded w-full mb-4"
           />
+          <button
+            className="bg-gradient-to-br from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium"
+            type="button"
+            onClick={handleOtpVerification}
+            disabled={loading}
+          >
+            {loading ? "Verifying..." : "Verify OTP"}
+          </button>
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="font-medium">Password</label>
-          <input
-            id="password"
-            placeholder="••••••••"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-        <button
-          className="bg-gradient-to-br from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Signing Up..." : "Sign Up"}
-        </button>
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-        <button
-          className=" text-neutral-700 border shadow-sm dark:text-neutral-300 text-sm  text-center px-4 w-full  rounded-md h-10 font-medium bg-white dark:bg-zinc-900"
-          type="button"
-          onClick={handleGoogleSignIn}
-        >Sign in with Google 
-        </button>
-      </form>
+      )}
     </div>
   );
 }

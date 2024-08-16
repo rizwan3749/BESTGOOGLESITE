@@ -3,13 +3,20 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { auth } from "../firebase"; // Adjust the import path based on your structure
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { IconSun, IconMoon } from "@tabler/icons-react";
-import axios from "axios";
+import { divMode } from "@tsparticles/engine";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState("light");
-  const [weather, setWeather] = useState(null);
+  const { theme, setTheme } = useTheme();
+  const [user, setUser] = useState<any>(null);
+  const [panel, setPanel] = useState(false);
+
+  const panelClicker = () => {
+    setPanel((panel) => !panel);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -18,19 +25,15 @@ export function ThemeSwitcher() {
       setTheme(storedTheme);
     }
 
-    // Fetch weather data when the component is mounted
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=Delhi&appid=YOUR_API_KEY&units=metric` // Replace YOUR_API_KEY with your actual API key
-        );
-        setWeather(response.data);
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
       }
-    };
+    });
 
-    fetchWeather();
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -44,31 +47,53 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="flex gap-4 justify-end px-4 items-center">
-      <button
-        onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-        className="p-2"
-      >
-        {isDarkMode ? (
-          <IconSun className="h-8 w-8 text-yellow-500" />
+    <div className="flex gap-4 justify-around py-3 px-4">
+      <Link href="/" className="font-bold">
+        <span className="text-green-500 dark:text-green-300">Best</span>
+        <span className="text-red-500 dark:text-red-300">Google</span>
+        <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
+      </Link>
+
+      <div className="flex gap-2">
+        {!user ? (
+          <>
+            <Link href="/Signup/">Sign up</Link>
+            <Link href="/Signin/">Sign in</Link>
+          </>
         ) : (
-          <IconMoon className="h-8 w-8 text-gray-800" />
-        )}
-      </button>
-      {weather && (
-        <div className="weather-info flex justify-end text-white items-center gap-2">
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`} // Use HTTPS
-            alt={weather.weather[0].description}
-            className="h-8 w-8"
-          />
-          <div className="text-gray-800">
-            <p className="font-semibold">{weather.name}</p>
-            <p>Temperature: {weather.main.temp}°C</p>
-            <p>Condition: {weather.weather[0].description}</p>
+          <div className="flex relative  border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
+            <div
+              onClick={panelClicker}
+              className="bg-red-400 h-10 rounded-full w-10 overflow-hidden"
+            >
+              <img
+                src={user.photoURL || "/default-avatar.png"} // Fallback image if no photoURL
+                alt="User Image"
+                className="object-cover h-full w-full"
+              />
+            </div>
+            {panel && (
+              <div className="bg-white absolute top-14 w-24 rounded-md h-32 text-black shadow-lg dark:shadow-gray-700 p-3 z-999">
+                <button onClick={() => signOut(auth)} className="text-sm">
+                  Sign out
+                </button>
+              </div>
+            )}
           </div>
+        )}
+        <div className="flex gap-4 justify-end px-4">
+          <button
+            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+            className="p-2"
+          >
+            {isDarkMode ? (
+              <IconMoon className="h-8 w-8 text-white/80" />
+            ) : (
+              <IconSun className="h-8 w-8 text-yellow-500" />
+            )}
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
