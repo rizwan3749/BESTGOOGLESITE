@@ -46,9 +46,9 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="flex gap-4 justify-around py-3 px-4 border-b border-black/10 dark:border-white/10">
+    <div className="flex gap-4  justify-around py-2 px-4 border-b border-black/10 dark:border-white/10">
       <div>
-        <Link href="/" className="font-bold">
+        <Link href="/" className="font-bold inline-flex items-center justify-center mt-1 py-1">
           <span className="text-green-500 dark:text-green-300">Best</span>
           <span className="text-red-500 dark:text-red-300">Google</span>
           <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
@@ -57,7 +57,7 @@ export function ThemeSwitcher() {
 
       <div className="flex gap-2">
         <Link href="/premiumPage">
-          <div className=" flex justidfy-center items-center">
+          <div className=" flex justidfy-center mt-1 items-center">
             <div className="relative inline-flex group">
               <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
               <a
@@ -85,8 +85,8 @@ export function ThemeSwitcher() {
         </div>
         {!user ? (
           <>
-            <Link href="/Signup/">Sign up</Link>
-            <Link href="/Signin/">Sign in</Link>
+            <Link href="/Signup/" className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">Sign up</Link>
+            <Link href="/Signin/" className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">Sign in</Link>
           </>
         ) : (
           <div className="flex relative  border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
@@ -101,8 +101,8 @@ export function ThemeSwitcher() {
               />
             </div>
             {panel && (
-              <div className="bg-white absolute top-14 w-24 rounded-md h-32 text-black shadow-lg dark:shadow-gray-700 p-3 z-999">
-                <button onClick={() => signOut(auth)} className="text-sm">
+              <div className="bg-white absolute top-14 w-32 items-center rounded-md h-20  text-black shadow-lg dark:shadow-gray-700 p-3 z-999">
+                <button onClick={() => signOut(auth)} className=" border-2 inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">
                   Sign out
                 </button>
               </div>

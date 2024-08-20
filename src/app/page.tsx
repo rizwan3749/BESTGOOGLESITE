@@ -15,6 +15,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import AnimatedTooltipPreview from "@/components/AnimatedTooltip";
+import { AnimatedModalDemo } from "@/components/AnimatedModalDemo";
+import { Calculator } from '@/components/Calculator';
 import Script from "next/script";
 import "../style/gsearch.css";
 
@@ -174,7 +176,11 @@ export default function Home() {
       </div>
       <div className="mt-9 mb-[-2rem]">
         <AnimatedTooltipPreview />
+
       </div>
+      <div className="flex justify-center gap-8">
+        <AnimatedModalDemo />
+        <Calculator /></div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={items.map((item) => item.id)}>
           <BentoGrid className="max-w-4xl p-3 mx-auto">

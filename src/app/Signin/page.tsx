@@ -46,7 +46,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-neutral-50 dark:bg-black">
+    <div className="max-w-md w-full mx-auto mt-4 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-neutral-50 dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
         Welcome Back
       </h2>
@@ -96,7 +96,8 @@ export default function SignInPage() {
           type="button"
           onClick={handleGoogleSignIn}
         >
-          Sign in with Google
+          <div className="text-center justify-center gap-2 flex p-3"><img src="/images/google.png" className="w-5 h-5" alt="" />Sign in with Google
+          </div>
         </button>
       </form>
     </div>
