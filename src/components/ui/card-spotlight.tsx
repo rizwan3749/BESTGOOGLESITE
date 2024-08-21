@@ -4,11 +4,10 @@ import { useMotionValue, motion, useMotionTemplate } from "framer-motion";
 import React, { MouseEvent as ReactMouseEvent, useState } from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { cn } from "@/lib/utils";
-
+import { useTheme } from "next-themes";
 export const CardSpotlight = ({
   children,
   radius = 350,
-  color = "#262626",
   className,
   ...props
 }: {
@@ -32,6 +31,8 @@ export const CardSpotlight = ({
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseEnter = () => setIsHovering(true);
   const handleMouseLeave = () => setIsHovering(false);
+  const theme = useTheme();
+  const color = theme === "dark" ? "#FFF" : "#262626";
   return (
     <div
       className={cn(

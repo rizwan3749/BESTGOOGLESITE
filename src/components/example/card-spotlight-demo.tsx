@@ -13,9 +13,10 @@ export default function CardSpotlightDemo() {
             <div className="text-neutral-800 dark:text-neutral-200 mt-4 relative z-20">
               Following are the benefits:
               <ul className="list-none  mt-2">
-                <NoStep title="Ads" />
-                <NoStep title="50 Links" />
-                <NoStep title="Light & Dark themes" />
+                <Step title="Ads" />
+                <Step title="50 Links" />
+                <Step title="Light & Dark themes" />
+                <Step title="5 Notes" />
                 <Step title="Customer Support" />
               </ul>
             </div>

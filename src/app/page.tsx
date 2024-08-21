@@ -186,7 +186,7 @@ export default function Home() {
         className="m-auto"
       />
       <div className="mb-4">
-        <div className="w-[45vw] p-4 dark:bg-gray-800 dark:text-black rounded-lg shadow-sm m-auto">
+        <div className="w-[45vw] p-4 dark:bg-gray-800 dark:text-black rounded-lg border border-black/15 dark:border-white/80 m-auto">
           <div className="gcse-search"></div>
         </div>
       </div>

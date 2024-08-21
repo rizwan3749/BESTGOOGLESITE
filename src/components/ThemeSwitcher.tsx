@@ -47,7 +47,7 @@ export function ThemeSwitcher() {
 
   return (
     <div className="flex gap-4  justify-around py-2 px-4 border-b border-black/10 dark:border-white/10">
-      <div>
+      <div className="flex gap-10">
         <Link
           href="/"
           className="font-bold inline-flex items-center justify-center mt-1 py-1"
@@ -56,24 +56,26 @@ export function ThemeSwitcher() {
           <span className="text-red-500 dark:text-red-300">Google</span>
           <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
         </Link>
+        <div>
+          <Link href="/premiumPage">
+            <div className=" flex justidfy-center mt-1 items-center">
+              <div className="relative inline-flex group">
+                <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+                <a
+                  href="#"
+                  title="Get quote now"
+                  className="relative inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black/80 dark:text-white transition-all duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                  role="button"
+                >
+                  Get Premium
+                </a>
+              </div>
+            </div>
+          </Link>
+        </div>
       </div>
 
       <div className="flex gap-2">
-        <Link href="/premiumPage">
-          <div className=" flex justidfy-center mt-1 items-center">
-            <div className="relative inline-flex group">
-              <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <a
-                href="#"
-                title="Get quote now"
-                className="relative inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black/80 dark:text-white transition-all duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
-              >
-                Get Premium
-              </a>
-            </div>
-          </div>
-        </Link>
         <div className="flex gap-4 justify-end px-4">
           <button
             onClick={() => setTheme(isDarkMode ? "light" : "dark")}
@@ -90,13 +92,13 @@ export function ThemeSwitcher() {
           <>
             <Link
               href="/Signup/"
-              className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
+              className="border-2 text-center border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
             >
               Sign up
             </Link>
             <Link
               href="/Signin/"
-              className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
+              className="border-2 text-center border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
             >
               Sign in
             </Link>
