@@ -49,14 +49,16 @@ export function Calculator() {
         </div>
       </ModalTrigger>
       <ModalBody>
-        <h4 className="text-lg md:text-2xl mt-2 text-neutral-600 dark:text-neutral-100 font-bold text-center mb-8">
-          Write your{" "}
-          <span className="px-1 py-0.5 rounded-md bg-gray-100 dark:bg-neutral-800 dark:border-neutral-700 border border-gray-200">
-            Number
-          </span>{" "}
-          here!📋
-        </h4>
-        <div className="bg-white dark:bg-gray-800 shadow-lg mx-auto my-4 rounded-lg p-6 w-72">
+        <ModalFooter className="h-16 text-transparent">
+          <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center w-full mb-8">
+            Calculate your{" "}
+            <span className="px-1 py-0.5 rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-gray-200">
+              Numbers
+            </span>{" "}
+            here!📝
+          </h4>
+        </ModalFooter>
+        <div className="bg-white dark:bg-gray-800 shadow-lg mx-auto my-4 rounded-lg p-6 w-full">
           <div className="mb-4 text-right text-gray-700 dark:text-gray-300">
             <div className="text-xl">{input || "0"}</div>
             <div className="text-3xl font-bold">{result || "0"}</div>
@@ -90,7 +92,7 @@ export function Calculator() {
               </button>
             ))}
             <button
-              className="col-span-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-lg p-4 rounded-md"
+              className="col-span-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-lg p-4 rounded-md"
               onClick={() => handleClick("0")}
             >
               0
@@ -107,6 +109,18 @@ export function Calculator() {
             >
               +
             </button>
+
+            <button
+              onClick={handleSingleClear}
+              className="col-span-1 bg-yellow-500 flex justify-center items-center dark:bg-yellow-600 hover:bg-yellow-400 dark:hover:bg-yellow-700 rounded-md"
+            >
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/ios-glyphs/30/ffffff/clear-symbol.png"
+                alt="clear-symbol"
+              />
+            </button>
             <button
               className="col-span-2 bg-red-400 dark:bg-red-600 hover:bg-red-500 dark:hover:bg-red-700 text-white text-lg p-4 rounded-md"
               onClick={handleClear}
@@ -119,18 +133,8 @@ export function Calculator() {
             >
               =
             </button>
-            <button onClick={handleSingleClear}>C</button>
           </div>
         </div>
-
-        <ModalFooter className="gap-4">
-          <button className="px-2 py-1 bg-gray-200 text-black dark:bg-black dark:border-black dark:text-white border border-gray-300 rounded-md text-sm w-28">
-            Cancel
-          </button>
-          <button className="bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28">
-            Save Now
-          </button>
-        </ModalFooter>
       </ModalBody>
     </Modal>
   );

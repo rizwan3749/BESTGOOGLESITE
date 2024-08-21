@@ -42,6 +42,10 @@ export function AnimatedModalDemo() {
 
   const addNote = async () => {
     if (newNote.trim() && user) {
+      if (user.subscriptionStatus === "free" && notes.length >= 5) {
+        alert("Free users can only add upto 5 notes.");
+        return;
+      }
       const notesCollection = collection(db, "users", user.uid, "notes");
       const docRef = await addDoc(notesCollection, {
         text: newNote,
@@ -91,11 +95,20 @@ export function AnimatedModalDemo() {
           </div>
         </ModalTrigger>
         <ModalBody>
+          <ModalFooter className="h-16 text-transparent">
+            <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center w-full mb-8">
+              Store your{" "}
+              <span className="px-1 py-0.5 rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-gray-200">
+                Thoughts
+              </span>{" "}
+              here!💭
+            </h4>
+          </ModalFooter>
           <ModalContent>
             {/* The rest of your Modal content */}
             <div className="container mx-auto p-4">
               <h1 className="text-2xl font-bold mb-4">Notepad</h1>
-              <div className="mb-4">
+              <div className="mb-4 ">
                 <input
                   type="text"
                   value={newNote}
@@ -105,12 +118,12 @@ export function AnimatedModalDemo() {
                 />
                 <button
                   onClick={addNote}
-                  className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                  className="mt-2 bg-black text-white px-4 py-2 rounded"
                 >
                   Add Note
                 </button>
               </div>
-              <ul className="list-disc pl-5">
+              <ul className="list-disc">
                 {notes.map((note, index) => (
                   <li key={index} className="mb-2 flex items-center">
                     {editIndex === index ? (
@@ -123,41 +136,45 @@ export function AnimatedModalDemo() {
                         />
                         <button
                           onClick={saveEdit}
-                          className="bg-green-500 text-white px-4 py-2 rounded"
+                          className="bg-black text-white px-4 py-2 rounded"
                         >
                           Save
                         </button>
                       </>
                     ) : (
-                      <>
-                        <span className="flex-1">{note.text}</span>
-                        <button
-                          onClick={() => startEdit(index)}
-                          className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deleteNote(note.id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                          Delete
-                        </button>
-                      </>
+                      <div className="border flex rounded-sm justify-between border-black/10 hover:bg-black/10 transition duration-300 w-full">
+                        <div className="px-4 py-2">{note.text}</div>
+                        <div>
+                          <button
+                            onClick={() => startEdit(index)}
+                            className=" text-black px-4 py-2 rounded mr-2"
+                          >
+                            <img
+                              width="24"
+                              height="24"
+                              src="https://img.icons8.com/material-sharp/24/pencil--v2.png"
+                              alt="pencil--v2"
+                            />
+                          </button>
+                          <button
+                            onClick={() => deleteNote(note.id)}
+                            className=" text-black px-4 py-2 rounded"
+                          >
+                            <img
+                              width="24"
+                              height="24"
+                              src="https://img.icons8.com/material-rounded/24/waste.png"
+                              alt="waste"
+                            />
+                          </button>
+                        </div>
+                      </div>
                     )}
                   </li>
                 ))}
               </ul>
             </div>
           </ModalContent>
-          <ModalFooter className="gap-4">
-            <button className="px-2 py-1 bg-gray-200 text-black dark:bg-black dark:border-black dark:text-white border border-gray-300 rounded-md text-sm w-28">
-              Cancel
-            </button>
-            <button className="bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28">
-              Save Now
-            </button>
-          </ModalFooter>
         </ModalBody>
       </Modal>
     </div>
