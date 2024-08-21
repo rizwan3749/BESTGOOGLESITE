@@ -48,7 +48,10 @@ export function ThemeSwitcher() {
   return (
     <div className="flex gap-4  justify-around py-2 px-4 border-b border-black/10 dark:border-white/10">
       <div>
-        <Link href="/" className="font-bold inline-flex items-center justify-center mt-1 py-1">
+        <Link
+          href="/"
+          className="font-bold inline-flex items-center justify-center mt-1 py-1"
+        >
           <span className="text-green-500 dark:text-green-300">Best</span>
           <span className="text-red-500 dark:text-red-300">Google</span>
           <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
@@ -85,8 +88,18 @@ export function ThemeSwitcher() {
         </div>
         {!user ? (
           <>
-            <Link href="/Signup/" className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">Sign up</Link>
-            <Link href="/Signin/" className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">Sign in</Link>
+            <Link
+              href="/Signup/"
+              className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
+            >
+              Sign up
+            </Link>
+            <Link
+              href="/Signin/"
+              className="relative border-2 inline-flex items-center justify-center px-4 py-1 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
+            >
+              Sign in
+            </Link>
           </>
         ) : (
           <div className="flex relative  border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
@@ -101,8 +114,11 @@ export function ThemeSwitcher() {
               />
             </div>
             {panel && (
-              <div className="bg-white absolute top-14 w-32 items-center rounded-md h-20  text-black shadow-lg dark:shadow-gray-700 p-3 z-999">
-                <button onClick={() => signOut(auth)} className=" border-2 inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl">
+              <div className="bg-white dark:bg-gray-900 absolute top-14 w-32 items-center rounded-md h-fit  text-black shadow-lg dark:shadow-gray-700/50 p-3 z-999">
+                <button
+                  onClick={() => signOut(auth)}
+                  className=" border-2 border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
+                >
                   Sign out
                 </button>
               </div>

@@ -20,7 +20,7 @@ const people = [
     id: 3,
     name: "Github",
     designation: "Github Easy Access",
-    image: "/images/github.png",
+    image: "/images/github2.jpg",
     Link: "https://github.com/",
   },
   {

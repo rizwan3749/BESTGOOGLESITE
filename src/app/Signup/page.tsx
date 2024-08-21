@@ -169,7 +169,9 @@ export default function SignupPage() {
             type="button"
             onClick={handleGoogleSignIn}
           >
-            <div className="text-center justify-center gap-2 flex p-3"><img src="/images/google.png" className="w-5 h-5" alt="" />Sign in with Google
+            <div className="text-center justify-center gap-2 flex p-3">
+              <img src="/images/google.png" className="w-5 h-5" alt="" />
+              Sign up with Google
             </div>
           </button>
         </form>
