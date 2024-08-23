@@ -6,12 +6,14 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase"; // Adjust the import path based on your structure
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { IconSun, IconMoon } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [user, setUser] = useState<any>(null);
   const [panel, setPanel] = useState(false);
+  const pathname = usePathname();
 
   const panelClicker = () => {
     setPanel((panel) => !panel);
@@ -42,7 +44,9 @@ export function ThemeSwitcher() {
   }, [theme]);
 
   if (!mounted) return null;
-
+  if (pathname.includes("Admin")) {
+    return null;
+  }
   const isDarkMode = theme === "dark";
 
   return (
@@ -82,9 +86,9 @@ export function ThemeSwitcher() {
             className="p-2"
           >
             {isDarkMode ? (
-              <IconMoon className="h-8 w-8 text-white/80" />
+              <IconSun className="h-8 w-8 text-neutral-300" />
             ) : (
-              <IconSun className="h-8 w-8 text-yellow-500" />
+              <IconMoon className="h-8 w-8 text-neutral-600" />
             )}
           </button>
         </div>
