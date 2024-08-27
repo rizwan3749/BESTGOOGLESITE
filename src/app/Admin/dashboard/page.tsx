@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 export default function SidebarDemo() {
   const router = useRouter();
   const auth = getAuth();
@@ -36,7 +37,7 @@ export default function SidebarDemo() {
     },
     {
       label: "Profile",
-      href: "#",
+      href: "../Admin/profile/",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -84,7 +85,7 @@ export default function SidebarDemo() {
           <div>
             <SidebarLink
               link={{
-                label: "Manu Arora",
+                label: "Afzal Khan",
                 href: "#",
                 icon: (
                   <Image
@@ -116,7 +117,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-        Acet Labs
+        Best Google Sites
       </motion.span>
     </Link>
   );
@@ -138,11 +139,50 @@ const Dashboard = () => {
     <div className="flex flex-1">
       <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
         <div className="flex gap-2">
-          <div className="h-20 w-full rounded-lg  bg-gray-100 dark:bg-neutral-800"></div>
+          <div className="h-20 w-full rounded-lg text-6xl p-2 text-center  bg-gray-100 dark:bg-neutral-800">Best Google Sites</div>
         </div>
-        <div className="flex gap-2 flex-1">
-          <div className="h-full w-full rounded-lg  bg-gray-100 dark:bg-neutral-800"></div>
+        <div className="flex flex-col gap-4 p-4">
+          {/* Card 1 */}
+          <div className="flex gap-2 flex-1">
+            <div className="h-full w-[30%] rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg">
+              <div className="mb-4">
+                <div className="mb-4">
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Select Category
+                  </label>
+                  <select
+                    id="category"
+                    className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-gray-100 dark:border-neutral-600"
+                  >
+                    <option value="">Graphic Design</option>
+                    <option value="">Web Design</option>
+                    <option value="">AI Tools</option>
+                    <option value="">Indians News</option>
+                    <option value="">Sports</option>
+                  </select>
+                </div>
+                <label htmlFor="link1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Add Links
+                </label>
+                <input
+                  type="text"
+                  id="link1"
+                  className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-gray-100 dark:border-neutral-600"
+                  placeholder="Enter your link here"
+                />
+              </div>
+              <button
+                type="button"
+                className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Add Link
+              </button>
+            </div>
+          </div>
+
         </div>
+
+
       </div>
     </div>
   );
