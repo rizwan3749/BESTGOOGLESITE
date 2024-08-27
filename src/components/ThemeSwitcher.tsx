@@ -93,20 +93,23 @@ export function ThemeSwitcher() {
           </button>
         </div>
         {!user ? (
-          <>
-            <Link
-              href="/Signup/"
-              className="border-2 text-center border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
-            >
-              Sign up
-            </Link>
-            <Link
-              href="/Signin/"
-              className="border-2 text-center border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
-            >
-              Sign in
-            </Link>
-          </>
+          <div className="flex items-center gap-10">
+            {" "}
+            <Link href="/Signin/">
+              {" "}
+              <button className="text-center transition duration-500 dark:hover:scale-105 text-black/80 dark:text-white font-semibold rounded-xl">
+                {" "}
+                Sign in{" "}
+              </button>{" "}
+            </Link>{" "}
+            <Link href="/Signup/">
+              {" "}
+              <button className="border-[2px] px-2 py-2 bg-[#00ED64] text-center border-black/50 hover:rounded-full duration-500 hover:transition-all transition scale-110 dark:border-[#00ED64] text-black/80 dark:text-black font-semibold rounded-sm">
+                {" "}
+                Get Started{" "}
+              </button>{" "}
+            </Link>{" "}
+          </div>
         ) : (
           <div className="flex relative  border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
             <div
@@ -120,23 +123,27 @@ export function ThemeSwitcher() {
               />
             </div>
             {panel && (
-              <div className="bg-white dark:bg-gray-900 absolute top-14 w-64 rounded-xl h-auto shadow-md dark:shadow-gray-700/50 p-4 z-999 transform transition-transform duration-300 ease-in-out hover:scale-105">
-                <div className="flex flex-col items-center space-y-6">
-                  <div className="justify-center flex md:rotate-90">
-                    <span>{">"}</span>
-
-                  </div>
+              <div className="bg-white dark:bg-gray-900 absolute top-14 w-64 rounded-xl h-auto shadow-md dark:shadow-gray-700/50 p-4 z-990 transform transition-transform duration-300 ease-in-out hover:scale-105">
+                <div className="flex flex-col items-center space-y-5">
                   <div className="text-center">
-                    <h3 className="text-lg font-semibold text-black/80 dark:text-white">User Name</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">user.email@example.com</p>
+                    <h3 className="text-lg font-semibold text-black/80 dark:text-white">
+                      {user.displayName}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {user.email}
+                    </p>
                   </div>
                   <div className="flex justify-between w-full px-4">
                     <button
-                      onClick={() => signOut(auth)}
+                      onClick={() => {
+                        signOut(auth);
+                        window.location.reload();
+                      }}
                       className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
                     >
-                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">Add Account</span>
-
+                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
+                        Add Account
+                      </span>
                     </button>
                   </div>
                   <div className="flex justify-between w-full px-4">
@@ -147,15 +154,14 @@ export function ThemeSwitcher() {
                       }}
                       className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
                     >
-                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">Sign Out</span>
-
+                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
+                        Sign Out
+                      </span>
                     </button>
                   </div>
                 </div>
               </div>
             )}
-
-
           </div>
         )}
       </div>
