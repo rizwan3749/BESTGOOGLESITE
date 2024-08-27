@@ -120,15 +120,42 @@ export function ThemeSwitcher() {
               />
             </div>
             {panel && (
-              <div className="bg-white dark:bg-gray-900 absolute top-14 w-32 items-center rounded-md h-fit  text-black shadow-lg dark:shadow-gray-700/50 p-3 z-999">
-                <button
-                  onClick={() => signOut(auth)}
-                  className=" border-2 border-black/50 hover:bg-black/80 dark:hover:bg-white transition duration-300 dark:hover:text-black hover:text-white dark:border-white inline items-center w-24 justify-center px-2 py-2 text-md font-semibold text-black/80 dark:text-white  font-pj rounded-xl"
-                >
-                  Sign out
-                </button>
+              <div className="bg-white dark:bg-gray-900 absolute top-14 w-64 rounded-xl h-auto shadow-md dark:shadow-gray-700/50 p-4 z-999 transform transition-transform duration-300 ease-in-out hover:scale-105">
+                <div className="flex flex-col items-center space-y-6">
+                  <div className="justify-center flex md:rotate-90">
+                    <span>{">"}</span>
+
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold text-black/80 dark:text-white">User Name</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">user.email@example.com</p>
+                  </div>
+                  <div className="flex justify-between w-full px-4">
+                    <button
+                      onClick={() => signOut(auth)}
+                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">Add Account</span>
+
+                    </button>
+                  </div>
+                  <div className="flex justify-between w-full px-4">
+                    <button
+                      onClick={() => {
+                        signOut(auth);
+                        window.location.reload();
+                      }}
+                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">Sign Out</span>
+
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
+
+
           </div>
         )}
       </div>
