@@ -43,7 +43,14 @@ onAuthStateChanged(auth, async (user) => {
         console.error("Error creating user document: ", error);
       }
     } else {
-      // Optionally update the last login time or other fields here
+      const userRole = userDocSnap.data().role;
+      if (userRole === "admin") {
+        // Admin specific logic
+        console.log("Admin user logged in");
+      } else {
+        // Non-admin users can be redirected or given limited access
+        console.log("Non-admin user logged in");
+      }
       try {
         await setDoc(
           userDocRef,

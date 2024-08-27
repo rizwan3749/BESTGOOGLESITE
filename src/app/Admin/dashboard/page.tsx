@@ -8,25 +8,58 @@ import {
   IconSettings,
   IconUserBolt,
   IconSunHigh,
-  IconSun,
+  IconMoon,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { useTheme } from "next-themes";
 
 export default function SidebarDemo() {
+  const { theme, setTheme } = useTheme();
   const router = useRouter();
   const auth = getAuth();
+  const db = getFirestore();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [link, setLink] = useState(`/default-avatar.png`);
+  const [dispName, setDispName] = useState(`Admin`);
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.push("login");
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.role === "admin") {
+            setIsAdmin(true);
+            setLink(userData.photoURL || "/default-avatar.png");
+            setDispName(userData.displayName);
+            setLoading(false);
+          } else {
+            router.push("../Admin/login");
+          }
+        }
       }
     });
-    return () => unsubscribe;
-  }, [auth, router]);
+
+    return () => unsubscribe();
+  }, [auth, db, router]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("../Admin/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   const links = [
     {
       label: "Dashboard",
@@ -37,7 +70,7 @@ export default function SidebarDemo() {
     },
     {
       label: "Profile",
-      href: "../Admin/profile/",
+      href: "../Admin/profile/", // Admin profile or regular profile
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -45,9 +78,15 @@ export default function SidebarDemo() {
     {
       label: "Theme",
       href: "#",
-      icon: (
-        <IconSunHigh className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon:
+        theme === "dark" ? (
+          <IconSunHigh className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        ) : (
+          <IconMoon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        ),
+      action: () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      },
     },
     {
       label: "Settings",
@@ -62,14 +101,21 @@ export default function SidebarDemo() {
       icon: (
         <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
+      action: handleLogout,
     },
   ];
+
   const [open, setOpen] = useState(false);
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a spinner, etc.
+  }
+
   return (
     <div
       className={cn(
         "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-[100vw] flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-        "h-[100vh]" // for your use case, use `h-screen` instead of `h-[60vh]`
+        "h-[100vh]"
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
@@ -78,18 +124,22 @@ export default function SidebarDemo() {
             {open ? <Logo /> : <LogoIcon />}
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
+                <SidebarLink
+                  key={idx}
+                  link={link}
+                  onClick={link.action} // Call the action on click if it exists
+                />
               ))}
             </div>
           </div>
           <div>
             <SidebarLink
               link={{
-                label: "Afzal Khan",
+                label: dispName,
                 href: "#",
                 icon: (
                   <Image
-                    src="https://assets.aceternity.com/manu.png"
+                    src={link}
                     className="h-7 w-7 flex-shrink-0 rounded-full"
                     width={50}
                     height={50}
@@ -105,6 +155,7 @@ export default function SidebarDemo() {
     </div>
   );
 }
+
 export const Logo = () => {
   return (
     <Link
@@ -122,6 +173,7 @@ export const Logo = () => {
     </Link>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <Link
@@ -139,7 +191,9 @@ const Dashboard = () => {
     <div className="flex flex-1">
       <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
         <div className="flex gap-2">
-          <div className="h-20 w-full rounded-lg text-6xl p-2 text-center  bg-gray-100 dark:bg-neutral-800">Best Google Sites</div>
+          <div className="h-20 w-full rounded-lg text-6xl p-2 text-center  bg-gray-100 dark:bg-neutral-800">
+            Best Google Sites
+          </div>
         </div>
         <div className="flex flex-col gap-4 p-4">
           {/* Card 1 */}
@@ -147,7 +201,10 @@ const Dashboard = () => {
             <div className="h-full w-[30%] rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg">
               <div className="mb-4">
                 <div className="mb-4">
-                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="category"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Select Category
                   </label>
                   <select
@@ -161,7 +218,10 @@ const Dashboard = () => {
                     <option value="">Sports</option>
                   </select>
                 </div>
-                <label htmlFor="link1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="link1"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Add Links
                 </label>
                 <input
@@ -179,10 +239,7 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-
         </div>
-
-
       </div>
     </div>
   );
