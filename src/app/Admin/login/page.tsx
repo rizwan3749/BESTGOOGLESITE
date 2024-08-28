@@ -28,7 +28,7 @@ export default function SignInPage() {
       router.push("/"); // Redirect to homepage
     } catch (error: any) {
       setError(error.message);
-      setLoading(false); ~
+      setLoading(false);
     }
   };
 
@@ -37,11 +37,7 @@ export default function SignInPage() {
       const result = await signInWithPopup(auth, provider);
       router.push("/Admin/dashboard"); // Redirect to homepage
     } catch (error: any) {
-      if (error.message === "Firebase: Error (auth/invalid-email).") {
-        setError("Invalid user, Please try again");
-      } else {
-        setError(error.message);
-      }
+      setError(error.message);
     }
   };
 

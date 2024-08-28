@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useTheme } from "next-themes";
-import { Component } from "@/components/chart"
-import { DataTableDemo } from "@/components/DataTableDemo"
+import { Component } from "@/components/chart";
+import { DataTableDemo } from "@/components/DataTableDemo";
 
 export default function SidebarDemo() {
   const { theme, setTheme } = useTheme();
@@ -47,6 +47,8 @@ export default function SidebarDemo() {
             router.push("../Admin/login");
           }
         }
+      } else {
+        router.push("../Admin/login");
       }
     });
 
@@ -194,20 +196,18 @@ const Dashboard = () => {
       <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
         <div className="flex gap-2">
           <div className="h-20 w-full rounded-lg text-6xl p-2 text-center  bg-gray-100 dark:bg-neutral-800">
-            Best Google Sites
+            DASHBOARD
           </div>
         </div>
         <div className="flex flex-row gap-4 p-4">
           {/* Card 1 */}
           <div className="w-[55%]">
             <Component />
-
           </div>
           <hr />
           <div className="w-[40%]">
             <DataTableDemo />
           </div>
-
         </div>
       </div>
     </div>
