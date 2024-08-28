@@ -28,7 +28,7 @@ export default function SignInPage() {
       router.push("/"); // Redirect to homepage
     } catch (error: any) {
       setError(error.message);
-      setLoading(false);
+      setLoading(false); ~
     }
   };
 

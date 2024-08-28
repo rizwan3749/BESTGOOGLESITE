@@ -17,6 +17,9 @@ import { cn } from "@/lib/utils";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useTheme } from "next-themes";
+import { TabsDemo } from "@/components/TabsDemo";
+import { CgProfile } from "react-icons/cg";
+
 
 export default function SidebarDemo() {
   const { theme, setTheme } = useTheme();
@@ -63,7 +66,7 @@ export default function SidebarDemo() {
   const links = [
     {
       label: "Dashboard",
-      href: "../Admin/dashboard",
+      href: "../Admin/dashboard/",
       icon: (
         <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -90,7 +93,7 @@ export default function SidebarDemo() {
     },
     {
       label: "Settings",
-      href: "#",
+      href: "../Admin/Setting/",
       icon: (
         <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -185,126 +188,25 @@ export const LogoIcon = () => {
   );
 };
 
-const ProfileForm = () => {
-  return (
-    <div className="max-w-2xl w-[50%] mx-auto mt-10 p-8 bg-white dark:bg-neutral-900 rounded-lg shadow-lg">
-      {" "}
-      <h2 className="text-2xl font-bold mb-6 text-center">Profile</h2>{" "}
-      {/* Profile Details Form */}{" "}
-      <form className="space-y-4 w-full">
-        {" "}
-        <div>
-          {" "}
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            {" "}
-            Full Name{" "}
-          </label>{" "}
-          <input
-            type="text"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Admin Name"
-          />{" "}
-        </div>{" "}
-        <div>
-          {" "}
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            {" "}
-            Email Address{" "}
-          </label>{" "}
-          <input
-            type="email"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="admin@example.com"
-          />{" "}
-        </div>{" "}
-        <div>
-          {" "}
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            {" "}
-            Phone Number{" "}
-          </label>{" "}
-          <input
-            type="tel"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="+123 456 7890"
-          />{" "}
-        </div>{" "}
-        <div className="flex justify-end">
-          {" "}
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {" "}
-            Save Changes{" "}
-          </button>{" "}
-        </div>{" "}
-      </form>{" "}
-      {/* Password Change Section */}{" "}
-      <div className="mt-10">
-        {" "}
-        <h3 className="text-xl font-bold mb-4">Change Password</h3>{" "}
-        <form className="space-y-4">
-          {" "}
-          <div>
-            {" "}
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              {" "}
-              Current Password{" "}
-            </label>{" "}
-            <input
-              type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter current password"
-            />{" "}
-          </div>{" "}
-          <div>
-            {" "}
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              {" "}
-              New Password{" "}
-            </label>{" "}
-            <input
-              type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter new password"
-            />{" "}
-          </div>{" "}
-          <div>
-            {" "}
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              {" "}
-              Confirm New Password{" "}
-            </label>{" "}
-            <input
-              type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Confirm new password"
-            />{" "}
-          </div>{" "}
-          <div className="flex justify-end">
-            {" "}
-            <button
-              type="submit"
-              className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              {" "}
-              Change Password{" "}
-            </button>{" "}
-          </div>{" "}
-        </form>{" "}
-      </div>{" "}
-    </div>
-  );
-}; // Dashboard with embedded ProfileForm
+// Dummy dashboard component with content
 const Dashboard = () => {
   return (
     <div className="flex flex-1">
-      {" "}
       <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-        {" "}
-        <ProfileForm />{" "}
-      </div>{" "}
+        <div className="flex gap-2">
+          <div className="h-20 w-full rounded-lg text-6xl p-2 text-center  bg-gray-100 dark:bg-neutral-800">
+            Best Google Sites
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 p-4">
+          <p className="m-auto flex gap-2 font-bold text-5xl">
+            <CgProfile />Profile
+          </p>
+
+          <TabsDemo />
+
+        </div>
+      </div>
     </div>
   );
 };
