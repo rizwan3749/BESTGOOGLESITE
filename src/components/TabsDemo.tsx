@@ -25,7 +25,7 @@ export function TabsDemo() {
                 <TabsTrigger value="password">Password</TabsTrigger>
             </TabsList>
             <TabsContent value="account">
-                <Card className="bg-neutral-700">
+                <Card className="dark:bg-neutral-700">
                     <CardHeader>
                         <CardTitle>Account</CardTitle>
                         <CardDescription>
@@ -48,7 +48,7 @@ export function TabsDemo() {
                 </Card>
             </TabsContent>
             <TabsContent value="password">
-                <Card className="bg-neutral-700">
+                <Card className="dark:bg-neutral-700">
                     <CardHeader>
                         <CardTitle>Password</CardTitle>
                         <CardDescription>

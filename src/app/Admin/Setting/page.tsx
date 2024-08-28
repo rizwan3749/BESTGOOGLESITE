@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useTheme } from "next-themes";
+import { CardWithForm } from "@/components/CardWithForm"
+
 
 
 export default function SidebarDemo() {
@@ -198,50 +200,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex flex-col gap-4 p-4">
                     {/* Card 1 */}
-                    <div className="flex gap-2 flex-1">
-                        <div className="h-full w-[30%] rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg">
-                            <div className="mb-4">
-                                <div className="mb-4">
-                                    <label
-                                        htmlFor="category"
-                                        className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                                    >
-                                        Select Category
-                                    </label>
-                                    <select
-                                        id="category"
-                                        className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-gray-100 dark:border-neutral-600"
-                                    >
-                                        <option value="">Graphic Design</option>
-                                        <option value="">Web Design</option>
-                                        <option value="">AI Tools</option>
-                                        <option value="">Indians News</option>
-                                        <option value="">Sports</option>
-                                    </select>
-                                </div>
-                                <label
-                                    htmlFor="link1"
-                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                                >
-                                    Add Links
-                                </label>
-                                <input
-                                    type="text"
-                                    id="link1"
-                                    className="mt-1 block w-full rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-gray-100 dark:border-neutral-600"
-                                    placeholder="Enter your link here"
-                                />
-                            </div>
-                            <button
-                                type="button"
-                                className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                                Add Link
-                            </button>
-
-                        </div>
-
-                    </div>
+                    <CardWithForm />
 
                 </div>
             </div>
