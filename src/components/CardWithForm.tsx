@@ -113,11 +113,15 @@ export function CardWithForm() {
                       />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                      <SelectItem value="web">Web Designing</SelectItem>
-                      <SelectItem value="Graphic">Graphic Designing</SelectItem>
-                      <SelectItem value="AI">AI Tools</SelectItem>
-                      <SelectItem value="Indian">Indian News</SelectItem>
-                      <SelectItem value="Sports">Sports</SelectItem>
+                      <SelectItem value="WEB DESIGNING">
+                        Web Designing
+                      </SelectItem>
+                      <SelectItem value="GRAPHIC DESIGNING">
+                        Graphic Designing
+                      </SelectItem>
+                      <SelectItem value="AI TOOLS">AI Tools</SelectItem>
+                      <SelectItem value="INDIAN NEWS">Indian News</SelectItem>
+                      <SelectItem value="SPORTS">Sports</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
