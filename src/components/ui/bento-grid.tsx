@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import * as React from "react";
 import { db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { IoIosArrowDropdown, IoIosArrowDropright } from "react-icons/io";
 
 export const BentoGrid = ({
   className,
@@ -86,9 +87,9 @@ export const BentoGridItem = ({
         </div>
         <div
           onClick={toggleAccordion}
-          className="text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className="text-gray-600 dark:text-gray-300  cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
-          {isOpen ? "▼" : "▶"} {/* Arrow icon */}
+          {isOpen ? <IoIosArrowDropdown /> : <IoIosArrowDropright />} {/* Arrow icon */}
         </div>
       </div>
       {isOpen && (

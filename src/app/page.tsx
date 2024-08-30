@@ -18,6 +18,7 @@ import AnimatedTooltipPreview from "@/components/AnimatedTooltip";
 import { AnimatedModalDemo } from "@/components/AnimatedModalDemo";
 import { Calculator } from "@/components/Calculator";
 import Script from "next/script";
+import { CiUnlock, CiLock } from "react-icons/ci";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -25,32 +26,32 @@ export default function Home() {
     {
       id: "1",
       title: "GRAPHIC DESIGNING",
-      description: "ALL 250+ GRAPHIC DESIGN LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      description: "ALL 250+ GRAPHIC DESIGN",
+
     },
     {
       id: "2",
       title: "WEB DESIGNING",
-      description: "ALL 250+ WEB DESIGN LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      description: "ALL 250+ WEB DESIGN .",
+
     },
     {
       id: "3",
       title: "INDIAN NEWS",
-      description: "ALL 250+ INDIAN NEWS LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      description: "ALL 250+ INDIAN NEWS .",
+
     },
     {
       id: "4",
       title: "SPORTS",
-      description: "ALL 250+ SPORTS LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      description: "ALL 250+ SPORTS .",
+
     },
     {
       id: "5",
       title: "AI TOOLS",
-      description: "ALL 250+ AI TOOLS LINKS.",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      description: "ALL 250+ AI TOOLS .",
+
     },
   ]);
 
@@ -129,7 +130,7 @@ export default function Home() {
       <div className="flex justify-between w-[44vw] m-auto">
         <div>
           <button onClick={() => setDragMode(!dragMode)}>
-            {dragMode ? "🔓" : "🔒"}
+            {dragMode ? <CiUnlock /> : <CiLock />}
           </button>
         </div>
         <div className="flex justify-center gap-8">
