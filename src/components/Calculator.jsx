@@ -63,7 +63,7 @@ export function Calculator() {
             <div className="text-xl">{input || "0"}</div>
             <div className="text-3xl font-bold">{result || "0"}</div>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {["7", "8", "9", "/"].map((val) => (
               <button
                 key={val}

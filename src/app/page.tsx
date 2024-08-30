@@ -18,7 +18,6 @@ import AnimatedTooltipPreview from "@/components/AnimatedTooltip";
 import { AnimatedModalDemo } from "@/components/AnimatedModalDemo";
 import { Calculator } from "@/components/Calculator";
 import Script from "next/script";
-import "../style/gsearch.css";
 
 export default function Home() {
   const { theme } = useTheme();
