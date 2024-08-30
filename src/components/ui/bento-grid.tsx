@@ -40,14 +40,15 @@ export const BentoGridItem = ({
   const [links, setLinks] = React.useState([]);
   const [hasFetchedLinks, setHasFetchedLinks] = React.useState(false);
 
-  const toggleAccordion = async () => {
+  const toggleAccordion = () => {
     setIsOpen(!isOpen);
     if (!hasFetchedLinks && !isOpen) {
-      await fetchLinks();
       setHasFetchedLinks(true);
     }
   };
-
+  React.useEffect(() => {
+    fetchLinks();
+  }, []);
   const fetchLinks = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "links"));
@@ -71,7 +72,7 @@ export const BentoGridItem = ({
           "hover:shadow-2xl hover:scale-105 hover:z-10": !isOpen,
         }
       )}
-      style={{ zIndex: isOpen ? 999 : 'auto' }}
+      style={{ zIndex: isOpen ? 999 : "auto" }}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -89,7 +90,8 @@ export const BentoGridItem = ({
           onClick={toggleAccordion}
           className="text-gray-600 dark:text-gray-300  cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
-          {isOpen ? <IoIosArrowDropdown /> : <IoIosArrowDropright />} {/* Arrow icon */}
+          {isOpen ? <IoIosArrowDropdown /> : <IoIosArrowDropright />}{" "}
+          {/* Arrow icon */}
         </div>
       </div>
       {isOpen && (

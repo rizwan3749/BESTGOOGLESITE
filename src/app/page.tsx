@@ -10,7 +10,6 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
-import { IconClipboardCopy } from "@tabler/icons-react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -27,31 +26,26 @@ export default function Home() {
       id: "1",
       title: "GRAPHIC DESIGNING",
       description: "ALL 250+ GRAPHIC DESIGN",
-
     },
     {
       id: "2",
       title: "WEB DESIGNING",
       description: "ALL 250+ WEB DESIGN .",
-
     },
     {
       id: "3",
       title: "INDIAN NEWS",
       description: "ALL 250+ INDIAN NEWS .",
-
     },
     {
       id: "4",
       title: "SPORTS",
       description: "ALL 250+ SPORTS .",
-
     },
     {
       id: "5",
       title: "AI TOOLS",
       description: "ALL 250+ AI TOOLS .",
-
     },
   ]);
 
