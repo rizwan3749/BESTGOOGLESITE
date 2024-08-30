@@ -19,7 +19,9 @@ import {
 } from "@/components/ui/select";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
 
 export function CardWithForm() {
   const [link, setLink] = React.useState("");
@@ -78,20 +80,57 @@ export function CardWithForm() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "links", id));
+      alert("Bookmark deleted successfully!");
+      fetchLinks(); // Refresh links after deletion
+    } catch (error) {
+      console.error("Error deleting bookmark: ", error);
+      alert("Error deleting bookmark.");
+    }
+  };
+
+  const handleEdit = async (id, currentLink, currentCategory) => {
+    const newLink = prompt("Enter new link:", currentLink);
+    const newCategory = prompt("Enter new category:", currentCategory);
+
+    if (newLink && newCategory) {
+      try {
+        await updateDoc(doc(db, "links", id), {
+          link: newLink,
+          category: newCategory,
+        });
+        alert("Bookmark updated successfully!");
+        fetchLinks(); // Refresh links after editing
+      } catch (error) {
+        console.error("Error updating bookmark: ", error);
+        alert("Error updating bookmark.");
+      }
+    }
+  };
+
+  // Group links by category
+  const groupedLinks = links.reduce((acc, link) => {
+    if (!acc[link.category]) {
+      acc[link.category] = [];
+    }
+    acc[link.category].push(link);
+    return acc;
+  }, {});
+
   return (
     <div className="flex flex-grow justify-between min-h-[90vh]">
-      <div className="grow-0 h-full ">
+      <div className="grow-0 h-full">
         <Card className="dark:bg-neutral-700 w-[350px]">
           <CardHeader>
             <CardTitle>ADD BOOKMARK</CardTitle>
-            <CardDescription>
-              Add your new bookmark in one-click.
-            </CardDescription>
+            <CardDescription>Add your new bookmark in one-click.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1">
                   <Label htmlFor="link">Link</Label>
                   <Input
                     id="link"
@@ -100,25 +139,18 @@ export function CardWithForm() {
                     onChange={(e) => setLink(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1">
                   <Label htmlFor="framework">Framework</Label>
                   <Select
                     onValueChange={(value) => setCategory(value)}
                     value={category}
                   >
                     <SelectTrigger id="framework">
-                      <SelectValue
-                        className="dark:bg-neutral-600"
-                        placeholder="Select"
-                      />
+                      <SelectValue className="dark:bg-neutral-600" placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                      <SelectItem value="WEB DESIGNING">
-                        Web Designing
-                      </SelectItem>
-                      <SelectItem value="GRAPHIC DESIGNING">
-                        Graphic Designing
-                      </SelectItem>
+                      <SelectItem value="WEB DESIGNING">Web Designing</SelectItem>
+                      <SelectItem value="GRAPHIC DESIGNING">Graphic Designing</SelectItem>
                       <SelectItem value="AI TOOLS">AI Tools</SelectItem>
                       <SelectItem value="INDIAN NEWS">Indian News</SelectItem>
                       <SelectItem value="SPORTS">Sports</SelectItem>
@@ -126,7 +158,7 @@ export function CardWithForm() {
                   </Select>
                 </div>
               </div>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex mt-3 justify-between">
                 <Button
                   variant="outline"
                   type="button"
@@ -143,36 +175,42 @@ export function CardWithForm() {
           </CardContent>
         </Card>
       </div>
-      <div className="grow-3 h-full p-4">
-        <Card className="dark:bg-neutral-700 w-full">
-          <CardHeader>
-            <CardTitle>Saved Bookmarks</CardTitle>
-            <CardDescription>All your saved bookmarks.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {links.length > 0 ? (
-              <ul>
-                {links.map((linkItem, index) => (
-                  <li key={index} className="mb-2">
-                    <strong>Link:</strong>{" "}
-                    <a href={linkItem.link} target="_blank">
-                      {linkItem.link}
-                    </a>
-                    <br />
-                    <strong>Category:</strong> {linkItem.category}
-                    <br />
-                    <strong>Added on:</strong>{" "}
-                    {new Date(
-                      linkItem.createdAt.seconds * 1000
-                    ).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No bookmarks available.</p>
-            )}
-          </CardContent>
-        </Card>
+      <div className=" grow-3 h-full grid-rows-2  p-4 space-y-4">
+        {Object.keys(groupedLinks).map((category, idx) => (
+          <Card key={idx} className="dark:bg-neutral-700 w-full">
+            <CardHeader>
+              <CardTitle>{category} Bookmarks</CardTitle>
+              <CardDescription>All your saved bookmarks in {category}.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {groupedLinks[category].map((linkItem) => (
+                <div
+                  key={linkItem.id}
+                  className="flex justify-between items-center p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-2"
+                >
+                  <div>
+                    <div><strong>Link:</strong> <a href={linkItem.link} target="_blank">{linkItem.link}</a></div>
+                    <div><strong>Added on:</strong> {new Date(linkItem.createdAt.seconds * 1000).toLocaleString()}</div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleEdit(linkItem.id, linkItem.link, linkItem.category)}
+                      className="px-4 py-2 ml-3 bg-neutral-600 text-white rounded-lg"
+                    >
+                      <FaRegEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(linkItem.id)}
+                      className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
+                    >
+                      <MdOutlineDeleteOutline />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
