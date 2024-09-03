@@ -18,38 +18,25 @@ import { AnimatedModalDemo } from "@/components/AnimatedModalDemo";
 import { Calculator } from "@/components/Calculator";
 import Script from "next/script";
 import { CiUnlock, CiLock } from "react-icons/ci";
+import { CgMoreVertical } from "react-icons/cg";
+import { Slider } from '@/components/ui/slider';
 
 export default function Home() {
+  const [panel, setPanel] = useState(false);
+  const panelClicker = () => {
+    setPanel((panel) => !panel);
+  };
   const { theme } = useTheme();
+  const [backgroundImage, setBackgroundImage] = useState(null); // State for background image
   const [items, setItems] = useState([
-    {
-      id: "1",
-      title: "GRAPHIC DESIGNING",
-      description: "ALL 250+ GRAPHIC DESIGN",
-    },
-    {
-      id: "2",
-      title: "WEB DESIGNING",
-      description: "ALL 250+ WEB DESIGN .",
-    },
-    {
-      id: "3",
-      title: "INDIAN NEWS",
-      description: "ALL 250+ INDIAN NEWS .",
-    },
-    {
-      id: "4",
-      title: "SPORTS",
-      description: "ALL 250+ SPORTS .",
-    },
-    {
-      id: "5",
-      title: "AI TOOLS",
-      description: "ALL 250+ AI TOOLS .",
-    },
+    { id: "1", title: "GRAPHIC DESIGNING", description: "ALL 250+ GRAPHIC DESIGN" },
+    { id: "2", title: "WEB DESIGNING", description: "ALL 250+ WEB DESIGN     ." },
+    { id: "3", title: "INDIAN NEWS", description: "ALL 250+ INDIAN NEWS  .  " },
+    { id: "4", title: "SPORTS", description: "ALL 250+ SPORTS HERE ." },
+    { id: "5", title: "AI TOOLS", description: "ALL 250+ AI TOOLS  HERE  ." },
   ]);
 
-  const [dragMode, setDragMode] = useState(false); // State to toggle drag-and-drop mode
+  const [dragMode, setDragMode] = useState(false);
   const [user] = useAuthState(auth);
 
   useEffect(() => {
@@ -72,6 +59,12 @@ export default function Home() {
         }
       };
       fetchWidgets();
+    }
+
+    // Load background image from local storage
+    const storedBackgroundImage = localStorage.getItem("backgroundImage");
+    if (storedBackgroundImage) {
+      setBackgroundImage(storedBackgroundImage);
     }
   }, [user]);
 
@@ -97,8 +90,33 @@ export default function Home() {
     }
   };
 
+  const handleBackgroundImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageBase64 = reader.result;
+        setBackgroundImage(imageBase64);
+        localStorage.setItem("backgroundImage", imageBase64); // Save to local storage
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveBackgroundImage = () => {
+    setBackgroundImage(null);
+    localStorage.removeItem("backgroundImage"); // Remove from local storage
+  };
+
   return (
-    <div className="mt-24">
+    <div className="mt-24"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+      }}
+    >
       <Script
         id="google-cse"
         async
@@ -132,12 +150,63 @@ export default function Home() {
           <Calculator />
         </div>
 
-        <div>⁝</div>
+        <div>
+          <div className="flex relative border-black-600 dark:border-white rounded-[50%] h-11 w-11 justify-center hover:border items-center gap-1">
+            <div onClick={panelClicker}>
+              <CgMoreVertical />
+            </div>
+            {panel && (
+              <div className="bg-white dark:bg-gray-900 absolute top-14 w-64 z-30 hover:rounded-xl h-auto shadow-md dark:shadow-gray-700/50 p-4 z-990 transform transition-transform duration-300 ease-in-out hover:scale-105">
+                <div className="flex flex-col items-center space-y-5">
+                  <div className="flex justify-between w-full px-4">
+                    <button
+                      onClick={() => {
+                        window.location.reload();
+                      }}
+                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
+                        <Slider />
+                      </span>
+                    </button>
+                  </div>
+                  <div className="flex justify-between w-full px-4">
+                    <label
+                      htmlFor="backgroundImageInput"
+                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      <span className="material-icons text-black/60 ml-7 dark:text-white mx-auto w-44">
+                        Change Background
+                      </span>
+                    </label>
+                    <input
+                      id="backgroundImageInput"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleBackgroundImageChange}
+                      className="hidden"
+                    />
+                  </div>
+                  <div className="flex justify-between w-full px-4">
+                    <button
+                      onClick={handleRemoveBackgroundImage}
+                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-red-600 dark:text-red-400 bg-red-100 dark:bg-gray-800 rounded-full hover:bg-red-200 dark:hover:bg-red-500 transition-colors duration-300"
+                    >
+                      <span className="material-icons text-red-600 dark:text-red-400 mx-auto w-44">
+                        Remove Background
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={items.map((item) => item.id)}>
-          <BentoGrid className="max-w-4xl p-3  min-h-48 mx-auto">
+          <BentoGrid className="max-w-4xl p-3 min-h-48 mx-auto">
             {items.map((item) => (
               <DroppableGrid id={item.id} key={item.id}>
                 {dragMode ? (
@@ -166,47 +235,34 @@ export default function Home() {
   );
 }
 
-// Draggable component
-function DraggableItem({ id, children }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: id,
-  });
+// Draggable Item Component
+function DraggableItem(props) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useDraggable({ id: props.id });
 
   const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    transition,
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="cursor-grab"
-    >
-      {children}
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+      {props.children}
     </div>
   );
 }
 
-// Droppable component
-function DroppableGrid({ id, children }) {
-  const { isOver, setNodeRef } = useDroppable({
-    id: id,
-  });
+// Droppable Grid Component
+function DroppableGrid(props) {
+  const { isOver, setNodeRef } = useDroppable({ id: props.id });
 
   const style = {
-    borderRadius: "1rem",
-    padding: "0.2rem",
-    backgroundColor: isOver ? "lightblue" : undefined,
-    transition: "background-color padding borderRadius 0.2s",
+    backgroundColor: isOver ? "rgba(255, 255, 255, 0.1)" : undefined,
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="min-h-28">
-      {children}
+    <div ref={setNodeRef} style={style}>
+      {props.children}
     </div>
   );
 }
