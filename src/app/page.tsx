@@ -20,6 +20,7 @@ import Script from "next/script";
 import { CiUnlock, CiLock } from "react-icons/ci";
 import { CgMoreVertical } from "react-icons/cg";
 import { Slider } from "@/components/ui/slider";
+import "./style.css";
 
 export default function Home() {
   const [panel, setPanel] = useState(false);
@@ -126,7 +127,7 @@ export default function Home() {
         backgroundAttachment: "fixed",
         backdropFilter: "blur(5px)",
         minHeight: "100vh",
-        paddingTop: "5rem",
+        paddingTop: "15vh",
       }}
     >
       <Script
@@ -143,8 +144,8 @@ export default function Home() {
         alt="Google Logo"
         className="m-auto"
       />
-      <div className="mb-4">
-        <div className="w-[45vw] p-4 dark:bg-gray-800 dark:text-black rounded-lg border border-black/15 dark:border-white/80 m-auto">
+      <div className="mb-4 mt-4">
+        <div className="w-[45vw] m-auto">
           <div className="gcse-search"></div>
         </div>
       </div>
@@ -172,9 +173,9 @@ export default function Home() {
                 <div className="flex flex-col items-center space-y-5">
                   <div className="flex justify-between w-full px-4">
                     <button
-                      onClick={() => {
-                        window.location.reload();
-                      }}
+                      // onClick={() => {
+                      //   window.location.reload();
+                      // }}
                       className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
                     >
                       <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
