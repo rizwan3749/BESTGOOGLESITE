@@ -19,7 +19,7 @@ import { Calculator } from "@/components/Calculator";
 import Script from "next/script";
 import { CiUnlock, CiLock } from "react-icons/ci";
 import { CgMoreVertical } from "react-icons/cg";
-import { Slider } from '@/components/ui/slider';
+import { Slider } from "@/components/ui/slider";
 
 export default function Home() {
   const [panel, setPanel] = useState(false);
@@ -29,8 +29,16 @@ export default function Home() {
   const { theme } = useTheme();
   const [backgroundImage, setBackgroundImage] = useState(null); // State for background image
   const [items, setItems] = useState([
-    { id: "1", title: "GRAPHIC DESIGNING", description: "ALL 250+ GRAPHIC DESIGN" },
-    { id: "2", title: "WEB DESIGNING", description: "ALL 250+ WEB DESIGN     ." },
+    {
+      id: "1",
+      title: "GRAPHIC DESIGNING",
+      description: "ALL 250+ GRAPHIC DESIGN",
+    },
+    {
+      id: "2",
+      title: "WEB DESIGNING",
+      description: "ALL 250+ WEB DESIGN     .",
+    },
     { id: "3", title: "INDIAN NEWS", description: "ALL 250+ INDIAN NEWS  .  " },
     { id: "4", title: "SPORTS", description: "ALL 250+ SPORTS HERE ." },
     { id: "5", title: "AI TOOLS", description: "ALL 250+ AI TOOLS  HERE  ." },
@@ -109,12 +117,16 @@ export default function Home() {
   };
 
   return (
-    <div className="mt-24"
+    <div
+      className="backdrop-blur-md min-h-[100vh]"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "100vh",
+        backgroundAttachment: "fixed",
+        backdropFilter: "blur(5px)",
+        minHeight: "100vh",
+        paddingTop: "5rem",
       }}
     >
       <Script
@@ -241,7 +253,9 @@ function DraggableItem(props) {
     useDraggable({ id: props.id });
 
   const style = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
     transition,
   };
 

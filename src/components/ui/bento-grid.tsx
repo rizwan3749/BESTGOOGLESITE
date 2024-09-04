@@ -46,9 +46,11 @@ export const BentoGridItem = ({
     setIsOpen(!isOpen);
     if (!hasFetchedLinks && !isOpen) {
       setHasFetchedLinks(true);
-      fetchLinks();
     }
   };
+  useEffect(() => {
+    fetchLinks();
+  }, []);
 
   const fetchLinks = async () => {
     try {
@@ -56,7 +58,9 @@ export const BentoGridItem = ({
       const fetchedLinks = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        logoUrl: `https://logo.clearbit.com/${new URL(doc.data().link).hostname}`,
+        logoUrl: `https://logo.clearbit.com/${
+          new URL(doc.data().link).hostname
+        }`,
       }));
       setLinks(fetchedLinks);
     } catch (error) {
@@ -67,7 +71,10 @@ export const BentoGridItem = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -92,7 +99,7 @@ export const BentoGridItem = ({
             "hover:shadow-2xl hover:scale-105 hover:z-10": !isOpen,
           }
         )}
-        style={{ zIndex: isOpen ? 999 : "auto", width: '100%' }}
+        style={{ zIndex: isOpen ? 999 : "auto", width: "100%" }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">

@@ -50,7 +50,7 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="flex gap-4  justify-around py-2 px-4 border-b border-black/10 dark:border-white/10">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/30 dark:bg-gray-900/30 flex gap-4 justify-around py-2 px-4 border-b border-black/10 dark:border-white/10 ">
       <div className="flex gap-10">
         <Link
           href="/"
@@ -62,9 +62,9 @@ export function ThemeSwitcher() {
         </Link>
         <div>
           <Link href="/premiumPage">
-            <div className=" flex justidfy-center mt-1 items-center">
+            <div className="flex justify-center mt-1 items-center">
               <div className="relative inline-flex group">
-                <div className="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+                <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
                 <a
                   href="#"
                   title="Get quote now"
@@ -94,30 +94,25 @@ export function ThemeSwitcher() {
         </div>
         {!user ? (
           <div className="flex items-center gap-10">
-            {" "}
             <Link href="/Signin/">
-              {" "}
               <button className="text-center transition duration-500 dark:hover:scale-105 text-black/80 dark:text-white font-semibold rounded-xl">
-                {" "}
-                Sign in{" "}
-              </button>{" "}
-            </Link>{" "}
+                Sign in
+              </button>
+            </Link>
             <Link href="/Signup/">
-              {" "}
               <button className="border-[2px] px-2 py-2 bg-[#00ED64] text-center border-black/50 hover:rounded-full duration-500 hover:transition-all transition scale-110 dark:border-[#00ED64] text-black/80 dark:text-black font-semibold rounded-sm">
-                {" "}
-                Get Started{" "}
-              </button>{" "}
-            </Link>{" "}
+                Get Started
+              </button>
+            </Link>
           </div>
         ) : (
-          <div className="flex relative  border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
+          <div className="flex relative border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
             <div
               onClick={panelClicker}
               className="bg-red-400 h-10 rounded-full w-10 overflow-hidden"
             >
               <img
-                src={user.photoURL || "/default-avatar.png"} // Fallback image if no photoURL
+                src={user.photoURL || "/default-avatar.png"}
                 alt="User Image"
                 className="object-cover h-full w-full"
               />
