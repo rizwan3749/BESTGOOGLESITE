@@ -15,7 +15,7 @@ export const BentoGrid = ({
     <div
       className={cn(
         "grid grid-cols-1 md:grid-cols-3 gap-6 mx-auto px-4",
-        "max-w-4xl w-full", // Set a maximum width and ensure it is full width
+        "max-w-4xl w-full",
         className
       )}
     >
@@ -46,7 +46,7 @@ export const BentoGridItem = ({
     setIsOpen(!isOpen);
     if (!hasFetchedLinks && !isOpen) {
       setHasFetchedLinks(true);
-      fetchLinks(); // Fetch links when the accordion is opened for the first time
+      fetchLinks();
     }
   };
 
@@ -56,6 +56,7 @@ export const BentoGridItem = ({
       const fetchedLinks = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        logoUrl: `https://logo.clearbit.com/${new URL(doc.data().link).hostname}`,
       }));
       setLinks(fetchedLinks);
     } catch (error) {
@@ -64,7 +65,6 @@ export const BentoGridItem = ({
     }
   };
 
-  // Close modal when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -92,7 +92,7 @@ export const BentoGridItem = ({
             "hover:shadow-2xl hover:scale-105 hover:z-10": !isOpen,
           }
         )}
-        style={{ zIndex: isOpen ? 999 : "auto", width: '100%' }} // Ensure the item takes full width of the grid cell
+        style={{ zIndex: isOpen ? 999 : "auto", width: '100%' }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -115,16 +115,15 @@ export const BentoGridItem = ({
         </div>
 
         {isOpen && (
-          <div className="relative container mx-auto p-4">
-
-            <div className="absolute z-40 top-16 left-0 mt-2 w-64 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 shadow-inner">
+          <div className="relative container mx-auto  p-4">
+            <div className="absolute z-40 top-12 left-0 mt-2 w-64 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 shadow-inner">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold">Links</h2>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className=" text-gray-500 px-4 py-2 rounded"
+                  className="text-gray-500 px-4 py-2 rounded"
                 >
-                  close
+                  Close
                 </button>
               </div>
               {links.length > 0 ? (
@@ -132,15 +131,19 @@ export const BentoGridItem = ({
                   {links
                     .filter((linkItem) => linkItem.category === title)
                     .map((linkItem, index) => (
-                      <li key={index} className="text-sm">
-                        <strong>Link:</strong>{" "}
+                      <li key={index} className="text-sm flex items-center">
+                        <img
+                          src={linkItem.logoUrl}
+                          alt=""
+                          className="w-6 rounded-xl h-6 mr-2"
+                        />
                         <a
                           href={linkItem.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                          className="text-blue-600 uppercase dark:text-blue-500 hover:underline"
                         >
-                          {linkItem.link}
+                          <strong className="uppercase">{linkItem.name}</strong>
                         </a>
                       </li>
                     ))}

@@ -25,7 +25,7 @@ export default function CardSpotlightDemo() {
             <div className="relative w-full inline-flex group">
               <div
                 title="Get quote now"
-                className="relative shadow-xl dark:shadow-none inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black   dark:text-white transition-all w-full duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                className="relative shadow-xl dark:shadow-none inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black   dark:text-white transition-all w-full duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
                 role="button"
               >
                 Current Plan
@@ -37,7 +37,7 @@ export default function CardSpotlightDemo() {
       <div>
         <CardSpotlight className="min-h-96 w-96 flex-col flex  justify-between">
           <div>
-            <p className="font-bold relative z-20 mt-2 text-3xl text-black dark:text-white">
+            <p className="font-bold relative z-20 mt-2 text-3xl  text-black dark:text-white">
               PREMIUM
             </p>
             <div className="text-neutral-800 dark:text-neutral-200 mt-4 relative z-20">

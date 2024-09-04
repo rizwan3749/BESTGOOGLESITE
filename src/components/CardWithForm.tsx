@@ -26,6 +26,7 @@ import { FaRegEdit } from "react-icons/fa";
 export function CardWithForm() {
   const [link, setLink] = React.useState("");
   const [category, setCategory] = React.useState("");
+  const [name, setName] = React.useState("");
   const [user, setUser] = React.useState(null);
   const [links, setLinks] = React.useState([]);
 
@@ -62,12 +63,14 @@ export function CardWithForm() {
 
     try {
       await addDoc(collection(db, "links"), {
+        name,
         link,
         category,
         createdAt: new Date(),
         createdBy: user.uid,
       });
 
+      setName("");
       setLink("");
       setCategory("");
       alert("Bookmark added successfully!");
@@ -91,13 +94,15 @@ export function CardWithForm() {
     }
   };
 
-  const handleEdit = async (id, currentLink, currentCategory) => {
+  const handleEdit = async (id, currentName, currentLink, currentCategory) => {
+    const newName = prompt("Enter new name:", currentName);
     const newLink = prompt("Enter new link:", currentLink);
     const newCategory = prompt("Enter new category:", currentCategory);
 
-    if (newLink && newCategory) {
+    if (newName && newLink && newCategory) {
       try {
         await updateDoc(doc(db, "links", id), {
+          name: newName,
           link: newLink,
           category: newCategory,
         });
@@ -131,6 +136,15 @@ export function CardWithForm() {
             <form onSubmit={handleSubmit}>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="Name"
+                    placeholder="Add Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1">
                   <Label htmlFor="link">Link</Label>
                   <Input
                     id="link"
@@ -140,7 +154,7 @@ export function CardWithForm() {
                   />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  <Label htmlFor="framework">Framework</Label>
+                  <Label htmlFor="framework">Bookmarks</Label>
                   <Select
                     onValueChange={(value) => setCategory(value)}
                     value={category}
@@ -175,7 +189,7 @@ export function CardWithForm() {
           </CardContent>
         </Card>
       </div>
-      <div className=" grow-3 h-full grid-rows-2  p-4 space-y-4">
+      <div className=" grow-2 h-full grid-rows-2  p-4 space-y-4">
         {Object.keys(groupedLinks).map((category, idx) => (
           <Card key={idx} className="dark:bg-neutral-700 w-full">
             <CardHeader>
@@ -189,12 +203,13 @@ export function CardWithForm() {
                   className="flex justify-between items-center p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-2"
                 >
                   <div>
+                    <div><strong>Name:</strong> <a href={linkItem.name} target="_blank">{linkItem.name}</a></div>
                     <div><strong>Link:</strong> <a href={linkItem.link} target="_blank">{linkItem.link}</a></div>
                     <div><strong>Added on:</strong> {new Date(linkItem.createdAt.seconds * 1000).toLocaleString()}</div>
                   </div>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => handleEdit(linkItem.id, linkItem.link, linkItem.category)}
+                      onClick={() => handleEdit(linkItem.id, linkItem.name, linkItem.link, linkItem.category)}
                       className="px-4 py-2 ml-3 bg-neutral-600 text-white rounded-lg"
                     >
                       <FaRegEdit />
