@@ -29,12 +29,13 @@ export function CardWithForm() {
   const [name, setName] = React.useState("");
   const [user, setUser] = React.useState(null);
   const [links, setLinks] = React.useState([]);
+  const [popupCategory, setPopupCategory] = React.useState(null);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        fetchLinks(); // Fetch links when user is authenticated
+        fetchLinks();
       } else {
         setUser(null);
       }
@@ -75,7 +76,7 @@ export function CardWithForm() {
       setCategory("");
       alert("Bookmark added successfully!");
 
-      // Refresh the links after adding a new one
+
       fetchLinks();
     } catch (error) {
       console.error("Error adding bookmark: ", error);
@@ -87,7 +88,7 @@ export function CardWithForm() {
     try {
       await deleteDoc(doc(db, "links", id));
       alert("Bookmark deleted successfully!");
-      fetchLinks(); // Refresh links after deletion
+      fetchLinks();
     } catch (error) {
       console.error("Error deleting bookmark: ", error);
       alert("Error deleting bookmark.");
@@ -107,7 +108,7 @@ export function CardWithForm() {
           category: newCategory,
         });
         alert("Bookmark updated successfully!");
-        fetchLinks(); // Refresh links after editing
+        fetchLinks();
       } catch (error) {
         console.error("Error updating bookmark: ", error);
         alert("Error updating bookmark.");
@@ -115,7 +116,7 @@ export function CardWithForm() {
     }
   };
 
-  // Group links by category
+
   const groupedLinks = links.reduce((acc, link) => {
     if (!acc[link.category]) {
       acc[link.category] = [];
@@ -189,43 +190,72 @@ export function CardWithForm() {
           </CardContent>
         </Card>
       </div>
-      <div className=" grow-2 h-full grid-rows-2  p-4 space-y-4">
-        {Object.keys(groupedLinks).map((category, idx) => (
-          <Card key={idx} className="dark:bg-neutral-700 w-full">
-            <CardHeader>
-              <CardTitle>{category} Bookmarks</CardTitle>
-              <CardDescription>All your saved bookmarks in {category}.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {groupedLinks[category].map((linkItem) => (
-                <div
-                  key={linkItem.id}
-                  className="flex justify-between items-center p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-2"
-                >
-                  <div>
-                    <div><strong>Name:</strong> <a href={linkItem.name} target="_blank">{linkItem.name}</a></div>
-                    <div><strong>Link:</strong> <a href={linkItem.link} target="_blank">{linkItem.link}</a></div>
-                    <div><strong>Added on:</strong> {new Date(linkItem.createdAt.seconds * 1000).toLocaleString()}</div>
+
+      <div className="grow-2 h-full p-4 space-y-4">
+        <div className="flex flex-wrap gap-4">
+          {Object.keys(groupedLinks).map((category, idx) => (
+            <Button
+              key={idx}
+              onClick={() => setPopupCategory(category)}
+              className="px-4 py-2 bg-gray-600 dark:hover:bg-blue-900 text-white rounded-lg"
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+
+        {/* Popup Card */}
+        {popupCategory && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-lg w-[700px] max-h-[80vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white dark:bg-neutral-700 z-10">
+                <CardHeader>
+                  <CardTitle>{popupCategory} Bookmarks</CardTitle>
+                  <CardDescription>All your saved bookmarks in {popupCategory}.</CardDescription>
+                  <span className="flex justify-end"> <Button variant="outline" onClick={() => setPopupCategory(null)}>
+                    Close
+                  </Button></span>
+                </CardHeader>
+              </div>
+              <CardContent>
+                {groupedLinks[popupCategory]?.map((linkItem) => (
+                  <div
+                    key={linkItem.id}
+                    className="flex justify-between items-center p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-2"
+                  >
+                    <div>
+                      <div>
+                        <strong>Name:</strong> <a href={linkItem.link} target="_blank" rel="noopener noreferrer">{linkItem.name}</a>
+                      </div>
+                      <div>
+                        <strong>Link:</strong> <a href={linkItem.link} target="_blank" rel="noopener noreferrer">{linkItem.link}</a>
+                      </div>
+                      <div><strong>Added on:</strong> {new Date(linkItem.createdAt.seconds * 1000).toLocaleString()}</div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleEdit(linkItem.id, linkItem.name, linkItem.link, linkItem.category)}
+                        className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
+                      >
+                        <FaRegEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(linkItem.id)}
+                        className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
+                      >
+                        <MdOutlineDeleteOutline />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleEdit(linkItem.id, linkItem.name, linkItem.link, linkItem.category)}
-                      className="px-4 py-2 ml-3 bg-neutral-600 text-white rounded-lg"
-                    >
-                      <FaRegEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(linkItem.id)}
-                      className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
-                    >
-                      <MdOutlineDeleteOutline />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        ))}
+                ))}
+              </CardContent>
+              <CardFooter className="flex justify-end">
+
+              </CardFooter>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

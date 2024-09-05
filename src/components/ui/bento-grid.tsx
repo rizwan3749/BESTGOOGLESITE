@@ -58,9 +58,8 @@ export const BentoGridItem = ({
       const fetchedLinks = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        logoUrl: `https://logo.clearbit.com/${
-          new URL(doc.data().link).hostname
-        }`,
+        logoUrl: `https://logo.clearbit.com/${new URL(doc.data().link).hostname
+          }`,
       }));
       setLinks(fetchedLinks);
     } catch (error) {
@@ -138,7 +137,7 @@ export const BentoGridItem = ({
                   {links
                     .filter((linkItem) => linkItem.category === title)
                     .map((linkItem, index) => (
-                      <li key={index} className="text-sm flex items-center">
+                      <li key={index} className="text-sm  border-solid border-2 p-1 rounded-md border-gray-300 dark:border-gray-500 flex items-center">
                         <img
                           src={linkItem.logoUrl}
                           alt=""
