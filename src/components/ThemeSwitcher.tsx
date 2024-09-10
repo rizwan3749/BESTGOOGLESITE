@@ -53,7 +53,6 @@ export function ThemeSwitcher() {
     return () => unsubscribe();
   }, []);
 
-
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(theme);
@@ -67,7 +66,7 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg flex justify-between items-center py-3 px-6 shadow-md">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/60 dark:bg-gray-900/70 backdrop-blur-lg flex justify-between items-center py-3 px-6 shadow-md">
       {/* Brand and Premium Button */}
       <div className="flex gap-10 items-center">
         <Link
@@ -95,7 +94,8 @@ export function ThemeSwitcher() {
             className="h-9 w-9 mr-2"
           />
           <span>
-            {weather.name}: {weather.main.temp}°C, {weather.weather[0].description}
+            {weather.name}: {weather.main.temp}°C,{" "}
+            {weather.weather[0].description}
           </span>
         </div>
       )}
@@ -141,10 +141,14 @@ export function ThemeSwitcher() {
               />
             </div>
             {panel && (
-              <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-900 shadow-md rounded-lg text-sm">
+              <div className="absolute right-0 mt-2 min-w-48 py-2 bg-white dark:bg-gray-900 shadow-md rounded-lg text-sm">
                 <div className="px-4 py-2 text-center">
-                  <p className="font-bold text-black/80 dark:text-white">{user.displayName}</p>
-                  <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
+                  <p className="font-bold text-black/80 dark:text-white">
+                    {user.displayName}
+                  </p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {user.email}
+                  </p>
                 </div>
                 <hr className="my-2 border-gray-200 dark:border-gray-700" />
                 <button

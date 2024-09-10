@@ -98,6 +98,13 @@ export default function Home() {
       });
     }
   };
+  useEffect(() => {
+    const img: any = new Image();
+    img.src = backgroundImage;
+    img.onload = () => {
+      document.body.style.backgroundImage = `url(${backgroundImage})`;
+    };
+  }, [backgroundImage]);
 
   const handleBackgroundImageChange = (event) => {
     const file = event.target.files[0];
@@ -134,6 +141,7 @@ export default function Home() {
       <Script
         id="google-cse"
         async
+        defer
         src="https://cse.google.com/cse.js?cx=80904074a37154829"
       />
       <img
@@ -147,7 +155,7 @@ export default function Home() {
       />
       <div className="mb-4 mt-4">
         <div className="w-[45vw] m-auto">
-          <div className="gcse-search"></div>
+          <div className="gcse-searchbox-only"></div>
         </div>
       </div>
       <div className="mt-9 mb-[-2rem]">
