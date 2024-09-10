@@ -1,10 +1,10 @@
 import React from "react";
-import CardSpotlightDemo from "@/components/example/card-spotlight-demo";
+import { CardSpotlight } from "@/components/ui/card-spotlight";
 
 const page = () => {
   return (
     <div className="flex items-center justify-center">
-      <CardSpotlightDemo />
+      <CardSpotlight />
     </div>
   );
 };
