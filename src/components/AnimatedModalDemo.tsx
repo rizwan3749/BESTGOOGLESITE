@@ -86,7 +86,7 @@ export function AnimatedModalDemo() {
   return (
     <div className="py-2 flex items-center justify-center">
       <Modal>
-        <ModalTrigger className="bg-white border-2 dark:bg-black dark:text-white text-black flex justify-center group/modal-btn">
+        <ModalTrigger className="bg-white border-2 dark:bg-gray-900 dark:text-white text-black flex justify-center group/modal-btn">
           <span className="group-hover/modal-btn:translate-x-48 text-center transition duration-500">
             Add Notes
           </span>

@@ -13,6 +13,7 @@ export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
   const [user, setUser] = useState<any>(null);
   const [panel, setPanel] = useState(false);
+  const [weather, setWeather] = useState<any>(null); // State for weather data
   const pathname = usePathname();
 
   const panelClicker = () => {
@@ -34,8 +35,24 @@ export function ThemeSwitcher() {
       }
     });
 
+    // Fetch weather data
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=Delhi&units=metric&appid=5c1e60aa063c3af6cf7294c14c0894a0`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Weather API response:", data); // Log the entire response for debugging
+        if (data && data.main && data.weather) {
+          setWeather(data); // Store the entire weather data
+        } else {
+          console.error("Weather data is not valid", data);
+        }
+      })
+      .catch((error) => console.error("Error fetching weather data", error));
+
     return () => unsubscribe();
   }, []);
+
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -50,111 +67,92 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white/30 dark:bg-gray-900/30 flex gap-4 justify-around py-2 px-4 border-b border-black/10 dark:border-white/10 ">
-      <div className="flex gap-10">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg flex justify-between items-center py-3 px-6 shadow-md">
+      {/* Brand and Premium Button */}
+      <div className="flex gap-10 items-center">
         <Link
           href="/"
-          className="font-bold inline-flex items-center justify-center mt-1 py-1"
+          className="font-bold inline-flex items-center justify-center text-xl"
         >
           <span className="text-green-500 dark:text-green-300">Best</span>
           <span className="text-red-500 dark:text-red-300">Google</span>
           <span className="text-yellow-500 dark:text-yellow-300">Sites</span>
         </Link>
-        <div>
-          <Link href="/premiumPage">
-            <div className="flex justify-center mt-1 items-center">
-              <div className="relative inline-flex group">
-                <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-md group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-                <a
-                  href="#"
-                  title="Get quote now"
-                  className="relative inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black/80 dark:text-white transition-all duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                  role="button"
-                >
-                  Get Premium
-                </a>
-              </div>
-            </div>
-          </Link>
-        </div>
+
+        <Link href="/premiumPage">
+          <button className="relative px-4 py-2 text-sm font-semibold text-black/80 dark:text-white bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-lg hover:scale-105 transition-transform duration-300">
+            Get Premium
+          </button>
+        </Link>
       </div>
 
-      <div className="flex gap-2">
-        <div className="flex gap-4 justify-end px-4">
-          <button
-            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-            className="p-2"
-          >
-            {isDarkMode ? (
-              <IconSun className="h-8 w-8 text-neutral-300" />
-            ) : (
-              <IconMoon className="h-8 w-8 text-neutral-600" />
-            )}
-          </button>
+      {/* Weather Information */}
+      {weather && weather.main && weather.weather && (
+        <div className="flex items-center text-sm font-medium text-black/80 dark:text-white">
+          <img
+            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+            alt="Weather Icon"
+            className="h-9 w-9 mr-2"
+          />
+          <span>
+            {weather.name}: {weather.main.temp}°C, {weather.weather[0].description}
+          </span>
         </div>
+      )}
+
+      {/* Theme Toggle & User Section */}
+      <div className="flex items-center gap-6">
+        {/* Theme Toggle */}
+        <button
+          onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-300"
+        >
+          {isDarkMode ? (
+            <IconSun className="h-6 w-6 text-yellow-400" />
+          ) : (
+            <IconMoon className="h-6 w-6 text-gray-600" />
+          )}
+        </button>
+
+        {/* User Authentication */}
         {!user ? (
-          <div className="flex items-center gap-10">
+          <div className="flex gap-4">
             <Link href="/Signin/">
-              <button className="text-center transition duration-500 dark:hover:scale-105 text-black/80 dark:text-white font-semibold rounded-xl">
+              <button className="text-sm font-semibold m-auto mt-2 text-black/80 dark:text-white hover:underline">
                 Sign in
               </button>
             </Link>
             <Link href="/Signup/">
-              <button className="border-[2px] px-2 py-2 bg-[#00ED64] text-center border-black/50 hover:rounded-full duration-500 hover:transition-all transition scale-110 dark:border-[#00ED64] text-black/80 dark:text-black font-semibold rounded-sm">
+              <button className="px-4 py-2 text-sm font-semibold bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300">
                 Get Started
               </button>
             </Link>
           </div>
         ) : (
-          <div className="flex relative border-gray-600 dark:border-white rounded-[50%] h-11 w-11 justify-center border items-center gap-2">
+          <div className="relative">
             <div
               onClick={panelClicker}
-              className="bg-red-400 h-10 rounded-full w-10 overflow-hidden"
+              className="flex items-center cursor-pointer"
             >
               <img
                 src={user.photoURL || "/default-avatar.png"}
-                alt="User Image"
-                className="object-cover h-full w-full"
+                alt="User Avatar"
+                className="h-10 w-10 rounded-full border border-gray-300"
               />
             </div>
             {panel && (
-              <div className="bg-white dark:bg-gray-900 absolute top-14 w-64 rounded-xl h-auto shadow-md dark:shadow-gray-700/50 p-4 z-990 transform transition-transform duration-300 ease-in-out hover:scale-105">
-                <div className="flex flex-col items-center space-y-5">
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-black/80 dark:text-white">
-                      {user.displayName}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.email}
-                    </p>
-                  </div>
-                  <div className="flex justify-between w-full px-4">
-                    <button
-                      onClick={() => {
-                        signOut(auth);
-                        window.location.reload();
-                      }}
-                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
-                    >
-                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
-                        Add Account
-                      </span>
-                    </button>
-                  </div>
-                  <div className="flex justify-between w-full px-4">
-                    <button
-                      onClick={() => {
-                        signOut(auth);
-                        window.location.reload();
-                      }}
-                      className="flex items-center space-x-2 w-full py-2 text-sm font-semibold text-black/80 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
-                    >
-                      <span className="material-icons text-black/60 dark:text-white mx-auto w-44">
-                        Sign Out
-                      </span>
-                    </button>
-                  </div>
+              <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-900 shadow-md rounded-lg text-sm">
+                <div className="px-4 py-2 text-center">
+                  <p className="font-bold text-black/80 dark:text-white">{user.displayName}</p>
+                  <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
                 </div>
+                <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={() => signOut(auth)}
+                  className="w-full text-left  flex justify-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                >
+                  Sign Out
+                </button>
               </div>
             )}
           </div>

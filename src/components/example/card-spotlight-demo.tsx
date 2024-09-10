@@ -1,69 +1,57 @@
-"use Client";
+"use client";
 import { CardSpotlight } from "@/components/ui/card-spotlight";
 
 export default function CardSpotlightDemo() {
   return (
-    <div className="flex gap-3  items-center w-full justify-center h-[90vh]">
-      <div>
-        <CardSpotlight className="h-96 w-96 flex flex-col justify-between">
-          <div>
-            <p className="font-bold relative z-20 mt-2 text-3xl text-black dark:text-white">
+    <div className="flex flex-col lg:flex-row gap-10 w-full items-center justify-center min-h-screen py-10 bg-white dark:bg-gray-900">
+      <div className="relative group">
+        <CardSpotlight className="h-[443px] w-[23rem] flex flex-col justify-between shadow-2xl rounded-2xl bg-white dark:bg-gray-800 overflow-hidden transform transition duration-500 group-hover:scale-105">
+          <div className="p-5">
+            <p className="font-extrabold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 dark:from-pink-400 dark:to-yellow-300">
               FREE
             </p>
-            <div className="text-neutral-800 dark:text-neutral-200 mt-4 relative z-20">
-              Following are the benefits:
-              <ul className="list-none  mt-2">
-                <Step title="Ads" />
-                <Step title="50 Links" />
-                <Step title="Light & Dark themes" />
-                <Step title="5 Notes" />
-                <Step title="Customer Support" />
+            <div className="mt-4">
+              <p className="font-medium text-gray-600 dark:text-gray-300">Benefits include:</p>
+              <ul className="mt-2 space-y-2">
+                <Feature title="50 Links" />
+                <Feature title="Customizable Themes" />
+                <Feature title="Basic Analytics" />
+                <Feature title="Community Support" />
               </ul>
             </div>
           </div>
-          <div className="  w-full dark:bg-black flex justidfy-center items-center">
-            <div className="relative w-full inline-flex group">
-              <div
-                title="Get quote now"
-                className="relative shadow-xl dark:shadow-none inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black   dark:text-white transition-all w-full duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
-                role="button"
-              >
-                Current Plan
-              </div>
-            </div>
+          <div className="p-5">
+            <button
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300"
+            >
+              Choose Free
+            </button>
           </div>
         </CardSpotlight>
       </div>
-      <div>
-        <CardSpotlight className="min-h-96 w-96 flex-col flex  justify-between">
-          <div>
-            <p className="font-bold relative z-20 mt-2 text-3xl  text-black dark:text-white">
+
+      <div className="relative group">
+        <CardSpotlight className="h-[443px] w-[23rem] flex flex-col justify-between shadow-2xl rounded-2xl bg-white dark:bg-gray-800 overflow-hidden transform transition duration-500 group-hover:scale-105">
+          <div className="p-5">
+            <p className="font-extrabold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 dark:from-yellow-300 dark:to-red-400">
               PREMIUM
             </p>
-            <div className="text-neutral-800 dark:text-neutral-200 mt-4 relative z-20">
-              Following are the benefits:
-              <ul className="list-none  mt-2">
-                <Step title="No Ads" />
-                <Step title="100+ Links" />
-                <Step title="Full Control" />
-                <Step title="Remove Widgets" />
-                <Step title="more themes" />
-                <Step title="Customer Support" />
+            <div className="mt-4">
+              <p className="font-medium text-gray-600 dark:text-gray-300">Unlock these features:</p>
+              <ul className="mt-2 space-y-2">
+                <Feature title="Unlimited Links" />
+                <Feature title="Advanced Analytics" />
+                <Feature title="Priority Support" />
+                <Feature title="Access to New Themes" />
               </ul>
             </div>
           </div>
-          <div className="w-full flex  justidfy-center items-center">
-            <div className="relative w-full inline-flex group">
-              <div className="absolute w-full transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <a
-                href="#"
-                title="Get quote now"
-                className="relative w-full  inline-flex items-center justify-center px-4 py-2 text-md font-semibold text-black dark:text-white transition-all duration-200 bg-white dark:bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
-              >
-                Get Premium
-              </a>
-            </div>
+          <div className="p-5">
+            <button
+              className="w-full bg-gradient-to-r from-yellow-400 to-red-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition duration-300"
+            >
+              Get Premium
+            </button>
           </div>
         </CardSpotlight>
       </div>
@@ -71,58 +59,25 @@ export default function CardSpotlightDemo() {
   );
 }
 
-const Step = ({ title }: { title: string }) => {
+const Feature = ({ title }) => {
   return (
-    <li className="flex gap-2 items-start">
-      <CheckIcon />
-      <p className="dark:text-white text-black">{title}</p>
-    </li>
-  );
-};
-const NoStep = ({ title }: { title: string }) => {
-  return (
-    <li className="flex gap-2 items-start">
-      <NoCheckIcon />
-      <p className="text-black dark:text-white">{title}</p>
+    <li className="flex items-center gap-3">
+      <Checkmark />
+      <span className="text-gray-800 dark:text-gray-100">{title}</span>
     </li>
   );
 };
 
-const CheckIcon = () => {
+const Checkmark = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
+      className="w-5 h-5 text-green-500"
+      fill="none"
+      stroke="currentColor"
       viewBox="0 0 24 24"
-      fill="currentColor"
-      className="h-4 w-4 text-blue-500 mt-1 flex-shrink-0"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path
-        d="M12 2c-.218 0 -.432 .002 -.642 .005l-.616 .017l-.299 .013l-.579 .034l-.553 .046c-4.785 .464 -6.732 2.411 -7.196 7.196l-.046 .553l-.034 .579c-.005 .098 -.01 .198 -.013 .299l-.017 .616l-.004 .318l-.001 .324c0 .218 .002 .432 .005 .642l.017 .616l.013 .299l.034 .579l.046 .553c.464 4.785 2.411 6.732 7.196 7.196l.553 .046l.579 .034c.098 .005 .198 .01 .299 .013l.616 .017l.642 .005l.642 -.005l.616 -.017l.299 -.013l.579 -.034l.553 -.046c4.785 -.464 6.732 -2.411 7.196 -7.196l.046 -.553l.034 -.579c.005 -.098 .01 -.198 .013 -.299l.017 -.616l.005 -.642l-.005 -.642l-.017 -.616l-.013 -.299l-.034 -.579l-.046 -.553c-.464 -4.785 -2.411 -6.732 -7.196 -7.196l-.553 -.046l-.579 -.034a28.058 28.058 0 0 0 -.299 -.013l-.616 -.017l-.318 -.004l-.324 -.001zm2.293 7.293a1 1 0 0 1 1.497 1.32l-.083 .094l-4 4a1 1 0 0 1 -1.32 .083l-.094 -.083l-2 -2a1 1 0 0 1 1.32 -1.497l.094 .083l1.293 1.292l3.293 -3.292z"
-        fill="currentColor"
-        strokeWidth="0"
-      />
-    </svg>
-  );
-};
-const NoCheckIcon = () => {
-  return (
-    <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="h-4 w-4 text-black/50 dark:text-white/50  mt-1 flex-shrink-0"
     >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path
-        d="M12 2c-.218 0 -.432 .002 -.642 .005l-.616 .017l-.299 .013l-.579 .034l-.553 .046c-4.785 .464 -6.732 2.411 -7.196 7.196l-.046 .553l-.034 .579c-.005 .098 -.01 .198 -.013 .299l-.017 .616l-.004 .318l-.001 .324c0 .218 .002 .432 .005 .642l.017 .616l.013 .299l.034 .579l.046 .553c.464 4.785 2.411 6.732 7.196 7.196l.553 .046l.579 .034c.098 .005 .198 .01 .299 .013l.616 .017l.642 .005l.642 -.005l.616 -.017l.299 -.013l.579 -.034l.553 -.046c4.785 -.464 6.732 -2.411 7.196 -7.196l.046 -.553l.034 -.579c.005 -.098 .01 -.198 .013 -.299l.017 -.616l.005 -.642l-.005 -.642l-.017 -.616l-.013 -.299l-.034 -.579l-.046 -.553c-.464 -4.785 -2.411 -6.732 -7.196 -7.196l-.553 -.046l-.579 -.034a28.058 28.058 0 0 0 -.299 -.013l-.616 -.017l-.318 -.004l-.324 -.001zm2.293 7.293a1 1 0 0 1 1.497 1.32l-.083 .094l-4 4a1 1 0 0 1 -1.32 .083l-.094 -.083l-2 -2a1 1 0 0 1 1.32 -1.497l.094 .083l1.293 1.292l3.293 -3.292z"
-        fill="currentColor"
-        strokeWidth="0"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
     </svg>
   );
 };

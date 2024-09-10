@@ -1,8 +1,9 @@
 .gsc-control-cse {
-    background-color: whitesmoke !important;
+    background-color: transparent !important;
     border-radius: 5rem !important;
     padding: 0.5rem 0.8rem !important;
     transition: all 300ms !important;
+    border: 1px solid gray !important;
 
     &:focus {
         background-color: #272728 !important;
@@ -10,9 +11,9 @@
 }
 
 .dark .gsc-control-cse {
-    background-color: #111827 !important;
+    background-color: transparent !important;
     color: black !important;
-    border: none !important;
+    border: 1px solid white !important;
 
 }
 
@@ -21,7 +22,7 @@
     color: white !important;
     border-radius: 0.5rem !important;
     border: none !important;
-    padding: 1.5rem 1rem !important;
+    padding: 1rem 1rem !important;
 
     &:hover {
         background-color: #161D2C !important;

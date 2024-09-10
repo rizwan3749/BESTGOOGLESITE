@@ -28,7 +28,7 @@ export default function Home() {
     setPanel((panel) => !panel);
   };
   const { theme } = useTheme();
-  const [backgroundImage, setBackgroundImage] = useState(null); // State for background image
+  const [backgroundImage, setBackgroundImage] = useState(null);
   const [items, setItems] = useState([
     {
       id: "1",
@@ -106,7 +106,7 @@ export default function Home() {
       reader.onload = () => {
         const imageBase64 = reader.result;
         setBackgroundImage(imageBase64);
-        localStorage.setItem("backgroundImage", imageBase64); // Save to local storage
+        localStorage.setItem("backgroundImage", imageBase64);
       };
       reader.readAsDataURL(file);
     }
@@ -114,7 +114,7 @@ export default function Home() {
 
   const handleRemoveBackgroundImage = () => {
     setBackgroundImage(null);
-    localStorage.removeItem("backgroundImage"); // Remove from local storage
+    localStorage.removeItem("backgroundImage");
   };
 
   return (
@@ -125,9 +125,10 @@ export default function Home() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
-        backdropFilter: "blur(5px)",
-        minHeight: "100vh",
+        backgroundRepeat: "no-repeat",
+        height: "130vh",
         paddingTop: "15vh",
+        overflow: "hidden",
       }}
     >
       <Script

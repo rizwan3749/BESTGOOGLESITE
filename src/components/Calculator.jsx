@@ -39,7 +39,7 @@ export function Calculator() {
     <Modal>
       <ModalTrigger
         onClick={handleToggleModal}
-        className="bg-white border-2 dark:bg-black mt-2 w-30 h-[44px] dark:text-white text-black flex justify-center group/modal-btn"
+        className="bg-white border-2 dark:bg-gray-900 mt-2 w-30 h-[44px] dark:text-white text-black flex justify-center group/modal-btn"
       >
         <span className=" text-center  hover:translate-x-0 transition duration-500 group-hover/modal-btn:translate-x-44">
           Calculator
