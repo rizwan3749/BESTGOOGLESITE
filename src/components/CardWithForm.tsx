@@ -19,7 +19,14 @@ import {
 } from "@/components/ui/select";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { addDoc, collection, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 
@@ -30,12 +37,15 @@ export function CardWithForm() {
   const [user, setUser] = React.useState(null);
   const [links, setLinks] = React.useState([]);
   const [popupCategory, setPopupCategory] = React.useState(null);
+  const [newCategory, setNewCategory] = React.useState("");
+  const [newCategorys, setNewCategorys] = React.useState([]);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
         fetchLinks();
+        fetchCategory();
       } else {
         setUser(null);
       }
@@ -58,6 +68,20 @@ export function CardWithForm() {
     }
   };
 
+  const fetchCategory = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "category"));
+      const fetchedCat = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNewCategorys(fetchedCat);
+    } catch (error) {
+      console.error("Error fetching Category: ", error);
+      alert("Error fetching Category.");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!link || !category || !user) return;
@@ -75,12 +99,30 @@ export function CardWithForm() {
       setLink("");
       setCategory("");
       alert("Bookmark added successfully!");
-
-
-      fetchLinks();
     } catch (error) {
       console.error("Error adding bookmark: ", error);
       alert("Error adding bookmark.");
+    }
+  };
+
+  const handleCatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCategory || !user) return;
+
+    try {
+      await addDoc(collection(db, "category"), {
+        newCategory,
+        createdAt: new Date(),
+        createdBy: user.uid,
+      });
+
+      setNewCategory("");
+      alert("Category added successfully!");
+
+      fetchCategory();
+    } catch (error) {
+      console.error("Error adding Category: ", error);
+      alert("Error adding Category.");
     }
   };
 
@@ -116,7 +158,6 @@ export function CardWithForm() {
     }
   };
 
-
   const groupedLinks = links.reduce((acc, link) => {
     if (!acc[link.category]) {
       acc[link.category] = [];
@@ -131,7 +172,9 @@ export function CardWithForm() {
         <Card className="dark:bg-neutral-700 w-[350px]">
           <CardHeader>
             <CardTitle>ADD BOOKMARK</CardTitle>
-            <CardDescription>Add your new bookmark in one-click.</CardDescription>
+            <CardDescription>
+              Add your new bookmark in one-click.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
@@ -161,19 +204,22 @@ export function CardWithForm() {
                     value={category}
                   >
                     <SelectTrigger id="framework">
-                      <SelectValue className="dark:bg-neutral-600" placeholder="Select" />
+                      <SelectValue
+                        className="dark:bg-neutral-600"
+                        placeholder="Select"
+                      />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                      <SelectItem value="WEB DESIGNING">Web Designing</SelectItem>
-                      <SelectItem value="GRAPHIC DESIGNING">Graphic Designing</SelectItem>
-                      <SelectItem value="AI TOOLS">AI Tools</SelectItem>
-                      <SelectItem value="INDIAN NEWS">Indian News</SelectItem>
-                      <SelectItem value="SPORTS">Sports</SelectItem>
+                      {newCategorys.map((cat, id) => (
+                        <SelectItem key={id} value={cat.newCategory}>
+                          {cat.newCategory}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <CardFooter className="flex mt-3 justify-between">
+              <CardFooter className="flex mt-5  px-0 justify-between">
                 <Button
                   variant="outline"
                   type="button"
@@ -184,7 +230,40 @@ export function CardWithForm() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Deploy</Button>
+                <Button type="submit">Add</Button>
+              </CardFooter>
+            </form>
+          </CardContent>
+        </Card>
+        <Card className="dark:bg-neutral-700 mt-5 w-[350px]">
+          <CardHeader>
+            <CardTitle>ADD Category</CardTitle>
+            <CardDescription>Add new category in one-click.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleCatSubmit}>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1">
+                  <Label htmlFor="name">Category Name</Label>
+                  <Input
+                    id="categoryName"
+                    placeholder="Add Category"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                  />
+                </div>
+              </div>
+              <CardFooter className="flex mt-5  px-0 justify-between">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    setNewCategory("");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Add</Button>
               </CardFooter>
             </form>
           </CardContent>
@@ -211,51 +290,55 @@ export function CardWithForm() {
               <div className="sticky top-0 bg-white dark:bg-neutral-700 z-10">
                 <CardHeader>
                   <CardTitle>{popupCategory} Bookmarks</CardTitle>
-                  <CardDescription>All your saved bookmarks in {popupCategory}.</CardDescription>
-                  <span className="flex justify-end"> <Button variant="outline" onClick={() => setPopupCategory(null)}>
-                    Close
-                  </Button></span>
+                  <CardDescription>
+                    All your saved bookmarks in {popupCategory}.
+                  </CardDescription>
                 </CardHeader>
               </div>
               <CardContent>
                 {groupedLinks[popupCategory]?.map((linkItem) => (
-                  <div
-                    key={linkItem.id}
-                    className="flex justify-between items-center p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 mb-2"
-                  >
-                    <div>
+                  <div key={linkItem.id} className="p-4 border-b">
+                    <div className="flex justify-between items-center">
                       <div>
-                        <strong>Name:</strong> <a href={linkItem.link} target="_blank" rel="noopener noreferrer">{linkItem.name}</a>
+                        <p className="font-semibold">{linkItem.name}</p>
+                        <p className="text-sm text-gray-500">{linkItem.link}</p>
                       </div>
-                      <div>
-                        <strong>Link:</strong> <a href={linkItem.link} target="_blank" rel="noopener noreferrer">{linkItem.link}</a>
+                      <div className="flex gap-4">
+                        <button
+                          className="text-gray-500 hover:text-gray-700"
+                          onClick={() =>
+                            handleEdit(
+                              linkItem.id,
+                              linkItem.name,
+                              linkItem.link,
+                              linkItem.category
+                            )
+                          }
+                        >
+                          <FaRegEdit />
+                        </button>
+                        <button
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => handleDelete(linkItem.id)}
+                        >
+                          <MdOutlineDeleteOutline />
+                        </button>
                       </div>
-                      <div><strong>Added on:</strong> {new Date(linkItem.createdAt.seconds * 1000).toLocaleString()}</div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(linkItem.id, linkItem.name, linkItem.link, linkItem.category)}
-                        className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
-                      >
-                        <FaRegEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(linkItem.id)}
-                        className="px-4 py-2 bg-neutral-600 text-white rounded-lg"
-                      >
-                        <MdOutlineDeleteOutline />
-                      </button>
                     </div>
                   </div>
                 ))}
               </CardContent>
               <CardFooter className="flex justify-end">
-
+                <Button
+                  onClick={() => setPopupCategory(null)}
+                  variant="outline"
+                >
+                  Close
+                </Button>
               </CardFooter>
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
