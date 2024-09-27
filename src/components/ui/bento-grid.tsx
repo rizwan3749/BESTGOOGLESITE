@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { IoIosArrowDropdown, IoIosArrowDropright } from "react-icons/io";
 
 export const BentoGrid = ({
   className,
@@ -15,7 +14,7 @@ export const BentoGrid = ({
     <div
       className={cn(
         "grid grid-cols-1 md:grid-cols-3 gap-6 mx-auto px-4",
-        "max-w-4xl w-full",
+        "max-w-5xl w-full",
         className
       )}
     >
@@ -28,29 +27,23 @@ export const BentoGridItem = ({
   className,
   title,
   description,
-  header,
   icon,
 }: {
   className?: string;
   title?: string | React.ReactNode;
   description?: string | React.ReactNode;
-  header?: React.ReactNode;
   icon?: React.ReactNode;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [links, setLinks] = useState<any[]>([]);
-  const [hasFetchedLinks, setHasFetchedLinks] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
-    if (!hasFetchedLinks && !isOpen) {
-      setHasFetchedLinks(true);
+  const toggleModal = async () => {
+    if (!isOpen) {
+      await fetchLinks();
     }
+    setIsOpen(!isOpen);
   };
-  useEffect(() => {
-    fetchLinks();
-  }, []);
 
   const fetchLinks = async () => {
     try {
@@ -58,8 +51,7 @@ export const BentoGridItem = ({
       const fetchedLinks = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        logoUrl: `https://logo.clearbit.com/${new URL(doc.data().link).hostname
-          }`,
+        logoUrl: `https://logo.clearbit.com/${new URL(doc.data().link).hostname}`,
       }));
       setLinks(fetchedLinks);
     } catch (error) {
@@ -70,10 +62,7 @@ export const BentoGridItem = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -88,79 +77,78 @@ export const BentoGridItem = ({
   }, [isOpen]);
 
   return (
-    <div className="py-2 w-full flex items-center justify-center">
+    <div className="py-4 w-full flex items-center justify-center">
       <div
-        ref={modalRef}
         className={cn(
-          "relative rounded-lg shadow-lg bg-white dark:bg-gray-900 border dark:border-gray-700 p-3 flex flex-col space-y-4 transform transition-transform duration-300",
-          className,
-          {
-            "hover:shadow-2xl hover:scale-105 hover:z-10": !isOpen,
-          }
+          "relative rounded-lg shadow-lg dark:bg-gray-900 bg-white  text-black dark:text-white p-4 cursor-pointer",
+
+          className
         )}
-        style={{ zIndex: isOpen ? 999 : "auto", width: "100%" }}
+        onClick={toggleModal}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4">
+          {/* <div className="bg-white p-2 rounded-full text-black">
             {icon}
-            <div className="flex flex-col">
-              <div className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                {title}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {description}
-              </div>
-            </div>
-          </div>
-          <div
-            onClick={toggleAccordion}
-            className="bg-white border-2 dark:bg-gray-800 rounded-xl dark:text-white text-black flex justify-center text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-          >
-            {isOpen ? <IoIosArrowDropdown /> : <IoIosArrowDropright />}
+          </div> */}
+          <div className="flex flex-col">
+            <div className="text-xl font-bold">{title}</div>
+            <div className="text-sm opacity-80">{description}</div>
           </div>
         </div>
 
         {isOpen && (
-          <div className="relative container mx-auto  p-4">
-            <div className="absolute z-40 top-12 left-0 mt-2 w-64 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 shadow-inner">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">Links</h2>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-500 px-4 py-2 rounded"
-                >
-                  Close
-                </button>
-              </div>
-              {links.length > 0 ? (
-                <ul className="space-y-2">
-                  {links
-                    .filter((linkItem) => linkItem.category === title)
-                    .map((linkItem, index) => (
-                      <li key={index} className="text-sm  border-solid border-2 p-1 rounded-md border-gray-300 dark:border-gray-500 flex items-center">
-                        <img
-                          src={linkItem.logoUrl}
-                          alt=""
-                          className="w-6 rounded-xl h-6 mr-2"
-                        />
-                        <a
-                          href={linkItem.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 uppercase dark:text-blue-500 hover:underline"
+          <>
+            {/* Overlay */}
+            <div className="fixed inset-0 bg-black bg-opacity-40 z-40  flex items-center justify-center">
+              {/* Modal */}
+              <div
+                ref={modalRef}
+                className="relative bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg p-6 transform transition-transform duration-300 scale-90"
+                style={{ zIndex: isOpen ? 999 : "auto", width: "50rem" }}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">Related Links</h2>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white px-3 py-1 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+                  >
+                    Close
+                  </button>
+                </div>
+                {links.length > 0 ? (
+                  <ul className="space-y-3">
+                    {links
+                      .filter((linkItem) => linkItem.category === title)
+                      .map((linkItem, index) => (
+                        <li
+                          key={index}
+                          className="inline-flex m-2 w-[234px] items-center space-x-3 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg p-3 shadow-md"
                         >
-                          <strong className="uppercase">{linkItem.name}</strong>
-                        </a>
-                      </li>
-                    ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  No bookmarks available.
-                </p>
-              )}
+                          <img
+                            src={linkItem.logoUrl}
+                            alt="logo"
+                            className="w-6 h-6 rounded-full"
+                            onError={(e) => { e.target.src = '/images/pngegg.png'; }}
+                          />
+                          <a
+                            href={linkItem.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 font-semibold dark:text-blue-400 hover:underline"
+                          >
+                            {linkItem.name}
+                          </a>
+                        </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    No bookmarks available.
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

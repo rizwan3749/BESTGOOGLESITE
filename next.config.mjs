@@ -8,6 +8,7 @@ const nextConfig = {
       "meet.google.com",
       "www.gstatic.com",
       "assets.aceternity.com",
+      "logo.clearbit.com"
     ],
   },
 };

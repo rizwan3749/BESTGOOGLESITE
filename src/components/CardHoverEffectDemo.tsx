@@ -31,7 +31,7 @@ export const projects = [
     {
         title: "Meta",
         description:
-            "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
+            "A technology company that focuses on building products that advance Facebook mission of bringing the world closer together.",
         link: "https://meta.com",
     },
     {

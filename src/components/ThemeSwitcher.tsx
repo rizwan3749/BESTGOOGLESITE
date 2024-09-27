@@ -66,7 +66,7 @@ export function ThemeSwitcher() {
   const isDarkMode = theme === "dark";
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white/60 dark:bg-gray-900/70 backdrop-blur-lg flex justify-between items-center py-3 px-6 shadow-md">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/60 dark:bg-gray-900/70 backdrop-blur-lg flex justify-between items-center py-3 px-6">
       {/* Brand and Premium Button */}
       <div className="flex gap-10 items-center">
         <Link

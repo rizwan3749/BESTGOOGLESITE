@@ -33,7 +33,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // Step 1: Send OTP to the user's email
+      // Step 1: Send OTP to the user email
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,

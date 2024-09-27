@@ -20,6 +20,7 @@ import Script from "next/script";
 import { CiUnlock, CiLock } from "react-icons/ci";
 import { CgMoreVertical } from "react-icons/cg";
 import { Slider } from "@/components/ui/slider";
+import { InfiniteMovingCardsDemo } from "@/components/InfiniteMovingCardsDemo";
 import "./style.css";
 
 export default function Home() {
@@ -133,7 +134,7 @@ export default function Home() {
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
-        height: "130vh",
+        minHeight: "120vh",
         paddingTop: "15vh",
         overflow: "hidden",
       }}
@@ -161,8 +162,8 @@ export default function Home() {
       <div className="mt-9 mb-[-2rem]">
         <AnimatedTooltipPreview />
       </div>
-      <div className="flex justify-between w-[44vw] m-auto">
-        <div>
+      <div className="flex justify-between  w-[44vw] m-auto">
+        <div className="flex relative border-black-600 dark:border-white rounded-[50%] h-11 w-11 justify-center hover:border items-center gap-1">
           <button onClick={() => setDragMode(!dragMode)}>
             {dragMode ? <CiUnlock /> : <CiLock />}
           </button>
@@ -225,7 +226,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-
+      <div className=" mt-10 flex justify-center">
+        <InfiniteMovingCardsDemo />
+      </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={items.map((item) => item.id)}>
           <BentoGrid className="max-w-4xl p-3 min-h-48 mx-auto">
@@ -234,7 +237,7 @@ export default function Home() {
                 {dragMode ? (
                   <DraggableItem id={item.id}>
                     <BentoGridItem
-                      className="dark:outline-1 cursor-pointer dark:outline-gray-300 border-gray-300 border"
+                      className="dark:outline-1 cursor-pointer dark:outline-gray-700 border-gray-700 border"
                       title={item.title}
                       description={item.description}
                       icon={item.icon}
@@ -242,7 +245,7 @@ export default function Home() {
                   </DraggableItem>
                 ) : (
                   <BentoGridItem
-                    className="dark:outline-1 h-28 cursor-pointer dark:outline-gray-300 border-gray-300 border"
+                    className="dark:outline-1 h-[74px] cursor-pointer dark:outline-gray-300 border-gray-300 border"
                     title={item.title}
                     description={item.description}
                     icon={item.icon}

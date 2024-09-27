@@ -116,7 +116,7 @@ export default function SidebarDemo() {
     <div
       className={cn(
         "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-[100vw] flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-        "h-[100vh]"
+        "min-h-[100vh]"
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
